@@ -7,9 +7,9 @@ You can download it on App Store: [ImageGotcha](https://itunes.apple.com/cn/app/
 # Author
 
 E-mail: hansenhs21@live.com  
+Weibo: [汉森hs](https://www.weibo.com/hanson21)  
 Twitter: [Hanson,@yuanpingzhang](https://twitter.com/yuanpingzhang)  
 Instagram: [hansonhs21](https://www.instagram.com/hansonhs21/)  
 Facebook: [Hanson Zhang](https://www.facebook.com/zhang.yuanping.7)  
-Weibo: [汉森hs](https://www.weibo.com/hanson21)
 
 
