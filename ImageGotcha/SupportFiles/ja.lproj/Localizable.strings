@@ -1,0 +1,35 @@
+/* 
+  Localizable.strings
+  ImageGotcha
+
+  Created by Hanson on 2018/5/11.
+  Copyright © 2018年 HansonStudio. All rights reserved.
+*/
+"ImageGotcha" = "ImageGotcha";
+"tutorial" = "チュートリアル";
+"openSafari" = "Safari を開く";
+"album" = "アルバム";
+"about" = "について";
+"cancel" = "キャンセル";
+"select" = "選ぶ";
+"cancelSelectAll" = "全て選択をキャンセル";
+"selectAll" = "全て選択";
+"delete" = "削除";
+"share" = "分かち合い";
+"opensource" = "オープンプロトコル";
+"saveToSystemAlbum" = "システムアルバムに保存する";
+"saveToPrivateAlbum" = "アプリのアルバムに保存する";
+"savePhoto" = "写真を保存する";
+"saveSuccess" = "保存完了";
+"saveFail" = "保存失敗";
+"ok" = "オーケー";
+"introduce" = "ImageGotcha は Safari の Extension，ただいまのホームページの画像を取ることができます，保存とチェックに便利です";
+"t2" = "シェアボタンをクリックする";
+"t3" = "一番下の一行に選択が多い";
+"t4" = " ImageGotcha を開く";
+"t5" = "ImageGotcha のアイコンをクリックする";
+"noPhoto" = "画像なし";
+"feedback" = "フィードバック";
+"Picture" = "写真";
+"Video" = "動画";
+

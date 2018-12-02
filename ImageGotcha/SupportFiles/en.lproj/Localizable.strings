@@ -1,0 +1,34 @@
+/* 
+  Localizable.strings
+  ImageGotcha
+
+  Created by Hanson on 2018/5/11.
+  Copyright © 2018年 HansonStudio. All rights reserved.
+*/
+"ImageGotcha" = "ImageGotcha";
+"tutorial" = "Tutorial";
+"openSafari" = "Open Safari";
+"album" = "Album";
+"about" = "About";
+"cancel" = "Cancel";
+"select" = "Select";
+"cancelSelectAll" = "Cancel All";
+"selectAll" = "Select All";
+"delete" = "Delete";
+"share" = "Share";
+"opensource" = "Open source licenses";
+"saveToSystemAlbum" = "Save to System Album";
+"saveToPrivateAlbum" = "Save to App Album";
+"savePhoto" = "Save Photo";
+"saveSuccess" = "Save Success";
+"saveFail" = "Save Failed";
+"ok" = "OK";
+"introduce" = "ImageGotcha is an Extension for Safari,it can extract the images from the current website, making it easy for you to browse and download images";
+"t2" = "Click the Share Button";
+"t3" = "Select More at the bottom row";
+"t4" = "Enable ImageGotcha";
+"t5" = "Click the icon of ImageGotcha to use";
+"noPhoto" = "No Photo";
+"feedback" = "Feedback";
+"Picture" = "Picture";
+"Video" = "Video";

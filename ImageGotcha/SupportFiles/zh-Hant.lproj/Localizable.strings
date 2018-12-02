@@ -1,0 +1,34 @@
+/* 
+  Localizable.strings
+  ImageGotcha
+
+  Created by Hanson on 2018/5/11.
+  Copyright © 2018年 HansonStudio. All rights reserved.
+*/
+"ImageGotcha" = "ImageGotcha";
+"tutorial" = "教程";
+"openSafari" = "打開 Safari";
+"album" = "相冊";
+"about" = "關於";
+"cancel" = "取消";
+"select" = "選擇";
+"cancelSelectAll" = "取消全選";
+"selectAll" = "全選";
+"delete" = "刪除";
+"share" = "分享";
+"opensource" = "開源協議";
+"saveToSystemAlbum" = "保存到系統相冊";
+"saveToPrivateAlbum" = "保存到App相冊";
+"savePhoto" = "保存圖片";
+"saveSuccess" = "保存成功";
+"saveFail" = "保存失敗";
+"ok" = "好的";
+"introduce" = "ImageGotcha 是一個 Safari 的 Extension，它可以提取當前網頁的圖片，方便你查看和保存";
+"t2" = "點擊分享按鈕";
+"t3" = "在最下面一行選擇更多";
+"t4" = "啟用 ImageGotcha";
+"t5" = "點擊 ImageGotcha 圖標來使用";
+"noPhoto" = "無圖片";
+"feedback" = "反饋";
+"Picture" = "圖片";
+"Video" = "視頻";
