@@ -1,0 +1,84 @@
+//
+//  Created by Hanson on 2018.
+//  Copyright © 2018年 HansonStudio. All rights reserved.
+//
+
+
+// Generated using SwiftGen, using vy-templete created by Hanson
+
+{% if catalogs %}
+{% set imageAlias %}{{param.imageAliasName|default:"Image"}}{% endset %}
+import UIKit.UIImage
+
+typealias {{imageAlias}} = UIImage
+
+{% set enumName %}{{param.enumName|default:"Asset"}}{% endset %}
+{% set imageType %}{{param.imageTypeName|default:"ImageAsset"}}{% endset %}
+@available(*, deprecated, renamed: "{{imageType}}")
+typealias {{enumName}}Type = {{imageType}}
+
+struct {{imageType}} {
+  fileprivate var name: String
+
+  var image: {{imageAlias}} {
+    let bundle = Bundle(for: BundleToken.self)
+    let image = {{imageAlias}}(named: name, in: bundle, compatibleWith: nil)
+    guard let result = image else { fatalError("Unable to load image named \(name).") }
+    return result
+  }
+}
+{% macro enumBlock assets sp %}
+{{sp}}  {% call casesBlock assets sp %}
+{{sp}}  {% if not param.noAllValues %}
+{{sp}}  {% endif %}
+{% endmacro %}
+{% macro casesBlock assets sp %}
+{{sp}}  {% for asset in assets %}
+{{sp}}  {% if asset.type == "color" %}
+{{sp}}  static let {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}} = {{colorType}}(name: "{{asset.value}}")
+{{sp}}  {% elif asset.type == "image" %}
+{{sp}}  static let {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}} = {{imageType}}(name: "{{asset.value}}")
+{{sp}}  {% elif asset.items %}
+{{sp}}  enum {{asset.name|swiftIdentifier:"pretty"|escapeReservedKeywords}} {
+{{sp}}    {% set sp2 %}{{sp}}  {% endset %}
+{{sp}}    {% call casesBlock asset.items sp2 %}
+{{sp}}  }
+{{sp}}  {% endif %}
+{{sp}}  {% endfor %}
+{% endmacro %}
+{% macro allValuesBlock assets filter prefix sp %}
+{{sp}}  {% for asset in assets %}
+{{sp}}  {% if asset.type == filter %}
+{{sp}}  {{prefix}}{{asset.name|swiftIdentifier:"pretty"|lowerFirstWord|escapeReservedKeywords}},
+{{sp}}  {% elif asset.items %}
+{{sp}}  {% set prefix2 %}{{prefix}}{{asset.name|swiftIdentifier:"pretty"|escapeReservedKeywords}}.{% endset %}
+{{sp}}  {% call allValuesBlock asset.items filter prefix2 sp %}
+{{sp}}  {% endif %}
+{{sp}}  {% endfor %}
+{% endmacro %}
+
+enum {{enumName}} {
+  {% if catalogs.count > 1 %}
+  {% for catalog in catalogs %}
+  enum {{catalog.name|swiftIdentifier:"pretty"|escapeReservedKeywords}} {
+    {% call enumBlock catalog.assets "  " %}
+  }
+  {% endfor %}
+  {% else %}
+  {% call enumBlock catalogs.first.assets "" %}
+  {% endif %}
+}
+
+
+extension {{imageAlias}} {
+  convenience init!(asset: {{imageType}}) {
+    let bundle = Bundle(for: BundleToken.self)
+    self.init(named: asset.name, in: bundle, compatibleWith: nil)
+  }
+}
+
+
+private final class BundleToken {}
+{% else %}
+// No assets found
+{% endif %}
