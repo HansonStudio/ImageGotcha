@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import Reusable
 
-class VideoCollectionViewCell: UICollectionViewCell {
+class VideoCollectionViewCell: UICollectionViewCell, Reusable {
     
     lazy var videoImageView = UIImageView(image: UIImage(named: "video"))
     lazy var selectImageView = UIImageView(image: UIImage(named: "select"))

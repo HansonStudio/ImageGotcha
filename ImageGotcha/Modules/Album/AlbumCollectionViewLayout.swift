@@ -22,7 +22,7 @@ class AlbumCollectionViewLayout: UICollectionViewFlowLayout {
     
     override func prepare() {
         //设置边距
-        self.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        self.sectionInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
     }
     
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {

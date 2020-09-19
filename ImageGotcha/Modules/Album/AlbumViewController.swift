@@ -8,7 +8,7 @@
 
 import UIKit
 import SnapKit
-import PhotoBrowser
+import HSPhotoKit
 
 class AlbumViewController: UIViewController {
 
@@ -23,13 +23,17 @@ class AlbumViewController: UIViewController {
     }
     
     lazy var selectImageButton: UIBarButtonItem = {
-        let awareBarButtonItem = UIBarButtonItem(title: LocalizedStr.select, style: UIBarButtonItemStyle.plain, target: self, action: #selector(selectImage))
+        let awareBarButtonItem = UIBarButtonItem(title: LocalizedStr.select, style: UIBarButtonItem.Style.plain, target: self, action: #selector(toggleSelectState))
         return awareBarButtonItem
     }()
     
-    lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: AlbumCollectionViewLayout())
-        collectionView.backgroundColor = UIColor.white
+    lazy var collectionView: SwipeSelectingCollectionView = {
+        let collectionView = SwipeSelectingCollectionView(frame: .zero, collectionViewLayout: AlbumCollectionViewLayout())
+        if #available(iOS 13.0, *) {
+            collectionView.backgroundColor = UIColor.systemGroupedBackground
+        } else {
+            collectionView.backgroundColor = UIColor.white
+        }
         collectionView.register(UINib(nibName: "AlbumCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: cellId)
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -38,7 +42,11 @@ class AlbumViewController: UIViewController {
     
     lazy var noPhotoLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor.darkText
+        if #available(iOS 13.0, *) {
+            label.textColor = UIColor.label
+        } else {
+            label.textColor = UIColor.white
+        }
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.text = LocalizedStr.noPhoto
         label.textAlignment = .center
@@ -65,11 +73,11 @@ class AlbumViewController: UIViewController {
     }
 }
 
+// MARK: - Private Function
 extension AlbumViewController {
     
     private func setUpView() {
         self.title = LocalizedStr.album
-        self.view.backgroundColor = UIColor.whiteBackground
         
         toolBarView.isHidden = true
         toolBarView.selectAllButton.addTarget(self, action: #selector(selectAllImage), for: .touchUpInside)
@@ -87,9 +95,6 @@ extension AlbumViewController {
             make.height.equalTo(44)
             make.top.equalTo(view.snp.bottomMargin)
         }
-//        noPhotoLabel.snp.makeConstraints { (make) in
-//            make.center.equalToSuperview()
-//        }
     }
     
     private func getShareDirectory() {
@@ -117,7 +122,7 @@ extension AlbumViewController {
                 let imageDataPath = imageURL.path
                 if let imageData = FileManager.default.contents(atPath: imageDataPath) {
                     let image = UIImage(data: imageData)
-                    let photo = Photo(image: image, thumbnailImage: nil)
+                    let photo = Photo(image: image)
                     photos.append(photo)
                     var cellModel = CellModel()
                     cellModel.photo = photo
@@ -132,8 +137,9 @@ extension AlbumViewController {
         }
     }
     
-    private func setUpSelectState() {
+    @objc private func toggleSelectState() {
         isSelectState = !isSelectState
+        collectionView.isSwipeSelectingEnable = isSelectState
         selectImageButton.title = isSelectState ? LocalizedStr.cancel : LocalizedStr.select
         
         toolBarView.isHidden = false
@@ -147,12 +153,8 @@ extension AlbumViewController {
                 cellModels[i].isSelected = false
                 toolBarView.selectAllButton.isSelected = false
             }
-            self.collectionView.reloadData()
+            collectionView.reloadData()
         }
-    }
-    
-    @objc private func selectImage() {
-        setUpSelectState()
     }
     
     @objc private func selectAllImage(sender: UIButton) {
@@ -160,7 +162,14 @@ extension AlbumViewController {
         for i in 0 ..< cellModels.count {
             cellModels[i].isSelected = sender.isSelected
         }
-        self.collectionView.reloadData()
+        for index in 0..<cellModels.count {
+            let indexPath = IndexPath(item: index, section: 0)
+            if sender.isSelected {
+                collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .bottom)
+            } else {
+                collectionView.deselectItem(at: indexPath, animated: true)
+            }
+        }
     }
     
     @objc private func deleteImage(sender: UIButton) {
@@ -179,7 +188,7 @@ extension AlbumViewController {
             }
         }
         getImageData()
-        setUpSelectState()
+        toggleSelectState()
     }
     
     private func showShareImage(photo: PhotoViewable) {
@@ -214,18 +223,23 @@ extension AlbumViewController: UICollectionViewDelegate, UICollectionViewDataSou
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        guard isSelectState else { return }
+        cellModels[indexPath.row].isSelected = !cellModels[indexPath.row].isSelected
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let currentPhoto = photos[indexPath.row]
         let currentItem = collectionView.cellForItem(at: indexPath) as! AlbumCollectionViewCell
         
         if isSelectState {
             cellModels[indexPath.row].isSelected = !cellModels[indexPath.row].isSelected
-            currentItem.configureCell(cellModels[indexPath.row])
-            
+            // CollectionView 会调用 Cell 的 isSelected 属性；故无须设置 currentItem.configureCell(cellModels[indexPath.row])
         } else {
-            let galleryPreview = PhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: currentItem)
+            collectionView.deselectItem(at: indexPath, animated: false)
+            let galleryPreview = PhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: currentItem, actionButtonStyle: .share, isHideURLTextView: true)
             galleryPreview.referenceViewForPhotoWhenDismissingHandler = { [weak self] photo in
-                if let index = self?.photos.index(where: {$0 === photo}) {
+                if let index = self?.photos.firstIndex(where: {$0 === photo}) {
                     let currentSelectedIndexPath = IndexPath(item: index, section: indexPath.section)
                     if let cell = collectionView.cellForItem(at: currentSelectedIndexPath) as? AlbumCollectionViewCell {
                         return cell.imageView
@@ -234,7 +248,7 @@ extension AlbumViewController: UICollectionViewDelegate, UICollectionViewDataSou
                 }
                 return nil
             }
-            galleryPreview.downloadButtonTappedHandler = { [weak self] (photo) in
+            galleryPreview.actionButtonTappedHandler = { [weak self] (photo) in
                 self?.showShareImage(photo: photo)
             }
             self.present(galleryPreview, animated: true, completion: nil)

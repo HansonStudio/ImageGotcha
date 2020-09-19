@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import PhotoBrowser
+import HSPhotoKit
 
 class AlbumCollectionViewCell: UICollectionViewCell {
 
@@ -15,27 +15,30 @@ class AlbumCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var overlayView: UIView!
     @IBOutlet weak var selectedView: UIImageView!
     
-    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
 
+    override var isSelected: Bool {
+        didSet {
+            overlayView.isHidden = !isSelected
+            selectedView.isHidden = !isSelected
+            let scale: CGFloat = isSelected ? 0.95 : 1.0
+            UIView.animate(withDuration: 0.1) {
+                self.transform = CGAffineTransform(scaleX: scale, y: scale)
+            }
+        }
+    }
 }
 
 extension AlbumCollectionViewCell {
     func configureCell(_ model: CellModel) {
         imageView.image = model.photo.image
-        overlayView.isHidden = !model.isSelected
-        selectedView.isHidden = !model.isSelected
-        let scale: CGFloat = model.isSelected ? 0.95 : 1.0
-        UIView.animate(withDuration: 0.1) {
-            self.transform = CGAffineTransform(scaleX: scale, y: scale)
-        }
     }
 }
 
 struct CellModel {
     var isSelected: Bool = false
     var isSaved: Bool = false
-    var photo: Photo = Photo(imageURL: nil, thumbnailImageURL: nil)
+    var photo: Photo = Photo(image: nil)
 }

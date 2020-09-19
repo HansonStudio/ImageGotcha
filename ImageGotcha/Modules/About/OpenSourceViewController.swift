@@ -18,8 +18,6 @@ class OpenSourceViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        tableView.backgroundColor = UIColor.whiteBackground
         tableView.tableFooterView = UIView()
         tableView.delegate = self
         tableView.dataSource = self
@@ -53,7 +51,7 @@ extension OpenSourceViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if let url = URL(string: opensourcesUrl[indexPath.row]) {
-            let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
+            let vc = SFSafariViewController(url: url)
             present(vc, animated: true)
         }
     }

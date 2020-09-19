@@ -1,0 +1,9 @@
+use_frameworks!
+
+target 'HSPhotoKitDemo' do
+#  pod 'HSPhotoKit', :path => '../'
+end
+
+target 'HSPhotoKit' do
+  pod 'Kingfisher'
+end

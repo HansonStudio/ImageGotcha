@@ -1,16 +1,35 @@
 PODS:
-  - SnapKit (4.0.0)
+  - HSPhotoKit (0.1.0):
+    - Kingfisher/Core
+  - Kingfisher/Core (5.14.1)
+  - Reusable (4.1.1):
+    - Reusable/Storyboard (= 4.1.1)
+    - Reusable/View (= 4.1.1)
+  - Reusable/Storyboard (4.1.1)
+  - Reusable/View (4.1.1)
+  - SnapKit (5.0.1)
 
 DEPENDENCIES:
+  - HSPhotoKit (from `HSPhotoKit/.`)
+  - Reusable
   - SnapKit
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
+    - Kingfisher
+    - Reusable
     - SnapKit
 
+EXTERNAL SOURCES:
+  HSPhotoKit:
+    :path: HSPhotoKit/.
+
 SPEC CHECKSUMS:
-  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
+  HSPhotoKit: 4299fca1156890f78f825fdd984f10325b681672
+  Kingfisher: 8050bc6f7f68cbf3908bd04df7ccbac188f6d6d6
+  Reusable: 53a9acf5c536f229b31b5865782414b508252ddb
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: d49da7459b0e487ac4096ac87ca2ceb7cbdb1d12
+PODFILE CHECKSUM: db8fd1a2152459610af293a3c472e4b43b015ea3
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.9.1

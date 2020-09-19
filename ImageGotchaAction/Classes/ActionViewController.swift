@@ -8,14 +8,15 @@
 
 import UIKit
 import MobileCoreServices
-import SavePhotosKit
-import PhotoBrowser
+import HSPhotoKit
 import AVKit
 import Photos
+import Kingfisher
+import Reusable
 
 class ActionViewController: UIViewController {
     
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var collectionView: SwipeSelectingCollectionView!
     @IBOutlet weak var selectBarButton: UIBarButtonItem!
     @IBOutlet weak var bottomToolBar: UIView!
     @IBOutlet weak var selectAllButton: UIButton!
@@ -34,24 +35,32 @@ class ActionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        collectionView.register(VideoCollectionViewCell.self, forCellWithReuseIdentifier: "VideoCollectionViewCell")
+        configuration()
+        setupView()
         
         // ActionExtension 传过来的内容
         for item in self.extensionContext!.inputItems as! [NSExtensionItem] {
-            for provider in item.attachments! as! [NSItemProvider] {
+            for provider in item.attachments! {
                 self.getResourceUrls(provider: provider)
             }
         }
-        
-        selectAllButton.setTitle(LocalizedStr.cancelSelectAll, for: .selected)
-        selectAllButton.setTitle(LocalizedStr.selectAll, for: .normal)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
+    private func configuration() {
+        // ActionExtension 最大 120M 限制，这里配置最大 90M
+        ImageCache.default.memoryStorage.config.totalCostLimit = 90 * 1024 * 1024
+    }
+    
+    private func setupView() {
+        collectionView.register(cellType: ImageCollectionViewCell.self)
+        collectionView.register(cellType: VideoCollectionViewCell.self)
+        selectAllButton.setTitle(LocalizedStr.cancelSelectAll, for: .selected)
+        selectAllButton.setTitle(LocalizedStr.selectAll, for: .normal)
+    }
     
     // MARK: - button Action
     
@@ -69,7 +78,7 @@ class ActionViewController: UIViewController {
         for model in cellModels {
             if model.isSelected {
                 if model.cellModelType == .image {
-                    photosToSave.append(model.photo)
+                    photosToSave.append(model.photo!)
                 } else {
                     videosToSave.append(model.videoUrl)
                 }
@@ -79,6 +88,7 @@ class ActionViewController: UIViewController {
             showSaveAction { [weak self] in
                 self?.activityIndicator.stopAnimating()
                 self?.setUpMultiSelectState()
+                self?.showResultAlert()
             }
         }
     }
@@ -88,7 +98,14 @@ class ActionViewController: UIViewController {
         for i in 0 ..< cellModels.count {
             cellModels[i].isSelected = sender.isSelected
         }
-        self.collectionView.reloadData()
+        for index in 0..<cellModels.count {
+            let indexPath = IndexPath(item: index, section: 0)
+            if sender.isSelected {
+                collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .bottom)
+            } else {
+                collectionView.deselectItem(at: indexPath, animated: true)
+            }
+        }
     }
 }
 
@@ -111,10 +128,9 @@ extension ActionViewController {
                     if let urlStrings = results["imgURLs"] as? [String] {
                         imageUrls = urlStrings
                     }
-                    if let insVideoUrls = results["insVideoUrls"] as? [String] {
-                        videoUrls = insVideoUrls
+                    if let videoUrlStrings = results["videoURLs"] as? [String] {
+                        videoUrls.append(contentsOf: videoUrlStrings)
                     }
-                    
                     self?.setUpCellModels(imageUrls: imageUrls, videoUrls: videoUrls)
                 }
             })
@@ -132,6 +148,7 @@ extension ActionViewController {
         #endif
         
         cellModels.removeAll()
+        photos.removeAll()
         
         for urlString in videoUrls {
             var cellModel = CellModel()
@@ -140,17 +157,16 @@ extension ActionViewController {
             cellModels.append(cellModel)
         }
         
-        photos.removeAll()
         let imageUrlSet = Set(imageUrls)
-        for url in Array(imageUrlSet) {
-            let photo = Photo(imageURL: URL(string: url), thumbnailImageURL: URL(string: url))
-            photos.append(photo)
+        for urlString in Array(imageUrlSet) {
             var cellModel = CellModel()
+            let photo = Photo(urlString: urlString)
+            photos.append(photo)
             cellModel.photo = photo
             cellModels.append(cellModel)
         }
-        
-        self.collectionView.reloadData()
+
+        collectionView.reloadData()
     }
     
     private func showResultAlert() {
@@ -168,6 +184,7 @@ extension ActionViewController {
     }
     
     private func setUpMultiSelectState() {
+        collectionView.isSwipeSelectingEnable = !isSelectState
         isSelectState = !isSelectState
         selectBarButton.title = isSelectState ? LocalizedStr.cancel : LocalizedStr.select
         
@@ -193,42 +210,24 @@ extension ActionViewController {
 extension ActionViewController {
     
     func showSaveAction(_ finishHandler: (() -> Void)? = nil) {
+        let photosAboutToSave = self.photosToSave
+        
         let alert = UIAlertController(title: nil, message: LocalizedStr.savePhoto, preferredStyle: .actionSheet)
         // 保存到系统相册选项
         let saveToSystemAlbumAction = UIAlertAction(title: LocalizedStr.saveToSystemAlbum, style: .default) { [weak self] (action) in
-            self?.activityIndicator.startAnimating()            
-            var imageToSave: [UIImage] = []
-            for photo in (self?.photosToSave)! {
-                let imageUrl = photo.imageURL
-                if photo.hasCachedImage(imageUrl) {
-                    guard let image = photo.getCachedImage(imageUrl) else { continue }
-                    imageToSave.append(image)
-                }
+            self?.activityIndicator.startAnimating()
+            self?.savePhotoManager.saveToSystemAlbum(photosToSave: photosAboutToSave) {
+                finishHandler?()
             }
-            
-            if let videosUrls = self?.videosToSave {
-                for url in videosUrls {
-                    guard url != nil else { return }
-                    self?.downloadVideoLinkAndCreateAsset(url!)
-                }
-            }
-            
-            SavePhotosManager.saveImageInAlbum(images: imageToSave, completion: { (result) in
-                DispatchQueue.main.async {
-                    finishHandler?()
-                    self?.showResultAlert()
-                }
-            })
         }
         // 保存到App内相册选项
         let saveToAppAlbumAction = UIAlertAction(title: LocalizedStr.saveToPrivateAlbum, style: .default) { [weak self] (action) in
             self?.activityIndicator.startAnimating()
-            self?.savePhotoManager.savePhotoToShareDirectory(photosToSave: self?.photosToSave ?? [], {
+            self?.savePhotoManager.savePhotoToShareDirectory(photosToSave: photosAboutToSave) {
                 finishHandler?()
-                self?.showResultAlert()
-            })
+            }
         }
-        
+        // 取消选项
         let cancelAction = UIAlertAction(title: LocalizedStr.cancel, style: .cancel, handler: nil)
         
         alert.addAction(saveToSystemAlbumAction)
@@ -258,16 +257,12 @@ extension ActionViewController: UICollectionViewDataSource {
         let cellModel = cellModels[indexPath.row]
         switch cellModel.cellModelType {
         case .image:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCollectionViewCell", for: indexPath) as? ImageCollectionViewCell else {
-                return UICollectionViewCell()
-            }
-            cell.configureCell(cellModels[indexPath.row])
+            let cell: ImageCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+            cell.configureCell(cellModel)
             return cell
         case .video:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoCollectionViewCell", for: indexPath) as? VideoCollectionViewCell else {
-                return UICollectionViewCell()
-            }
-            cell.configureCell(cellModels[indexPath.row])
+            let cell: VideoCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+            cell.configureCell(cellModel)
             return cell
         }
     }
@@ -280,28 +275,24 @@ extension ActionViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cellModel = cellModels[indexPath.row]
-        let currentItem = collectionView.cellForItem(at: indexPath)
+        
         
         switch cellModel.cellModelType {
         case .image:
+            let currentItem = collectionView.cellForItem(at: indexPath) as! ImageCollectionViewCell
             let currentPhoto = cellModel.photo
             if isSelectState {
-                cellModels[indexPath.row].isSelected = !cellModels[indexPath.row].isSelected
-                if let currentItem = currentItem as? ImageCollectionViewCell {
-                    currentItem.configureCell(cellModels[indexPath.row])
-                }
-                
+                cellModels[indexPath.row].isSelected.toggle()
+                currentItem.configureCell(cellModels[indexPath.row])
             } else {
+                collectionView.deselectItem(at: indexPath, animated: false)
+                currentPhoto?.image = currentItem.previewImageView.image
                 let galleryPreview = PhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: currentItem)
                 galleryPreview.referenceViewForPhotoWhenDismissingHandler = { [weak self] photo in
-                    if let index = self?.cellModels.index(where: { $0.photo === photo }) {
-                        let currentSelectedIndexPath = IndexPath(item: index, section: indexPath.section)
-                        if let cell = collectionView.cellForItem(at: currentSelectedIndexPath) as? ImageCollectionViewCell {
-                            return cell.previewImageView
-                        }
-                        return nil
-                    }
-                    return nil
+                    guard let index = self?.cellModels.firstIndex(where: { $0.photo === photo }) else { return nil }
+                    let selectedIndexPath = IndexPath(item: index, section: indexPath.section)
+                    let cell = collectionView.cellForItem(at: selectedIndexPath) as? ImageCollectionViewCell
+                    return cell?.previewImageView
                 }
                 galleryPreview.longPressGestureHandler = { [weak self] (photo, gesture) in
                     self?.photosToSave.removeAll()
@@ -310,7 +301,7 @@ extension ActionViewController: UICollectionViewDelegate {
                         self?.activityIndicator.stopAnimating()
                     })
                 }
-                galleryPreview.downloadButtonTappedHandler = { [weak self] (photo) in
+                galleryPreview.actionButtonTappedHandler = { [weak self] (photo) in
                     self?.photosToSave.removeAll()
                     self?.photosToSave.append(photo as! Photo)
                     self?.showSaveAction({
@@ -320,13 +311,12 @@ extension ActionViewController: UICollectionViewDelegate {
                 self.present(galleryPreview, animated: true, completion: nil)
             }
         case .video:
+            let currentItem = collectionView.cellForItem(at: indexPath) as! VideoCollectionViewCell
             if isSelectState {
                 cellModels[indexPath.row].isSelected = !cellModels[indexPath.row].isSelected
-                if let currentItem = currentItem as? VideoCollectionViewCell {
-                    currentItem.configureCell(cellModels[indexPath.row])
-                }
-                
+                currentItem.configureCell(cellModels[indexPath.row])
             } else {
+                collectionView.deselectItem(at: indexPath, animated: false)
                 guard cellModel.videoUrl != nil else { return }
                 let player = AVPlayer(url: cellModel.videoUrl!)
                 let playerViewController = AVPlayerViewController()
@@ -339,10 +329,18 @@ extension ActionViewController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        print("deselct")
+        guard isSelectState else { return }
+        cellModels[indexPath.row].isSelected = !cellModels[indexPath.row].isSelected
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let cell = cell as? ImageCollectionViewCell
+        // 取消已经隐藏的 Cell 的下载任务
+        cell?.previewImageView.kf.cancelDownloadTask()
     }
 }
 
+// MARK: - 视频下载（暂不用）
 extension ActionViewController {
     func downloadVideoLinkAndCreateAsset(_ videoURL: URL) {
 //        guard let videoURL = URL(string: videoLink) else { return }

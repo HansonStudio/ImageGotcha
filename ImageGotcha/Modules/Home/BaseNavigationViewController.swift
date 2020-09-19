@@ -15,9 +15,9 @@ class BaseNavigationViewController: UINavigationController {
         
         // 全局配置导航栏的颜色
         UINavigationBar.appearance().barTintColor = UIColor.white
-        UINavigationBar.appearance().tintColor = UIColor.greyFont
+        UINavigationBar.appearance().tintColor = Color.greyFont
         navigationBar.isTranslucent = false
-        navigationBar.titleTextAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18), NSAttributedStringKey.foregroundColor: UIColor.greyFont]
+        navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18), NSAttributedString.Key.foregroundColor: Color.greyFont]
         
         interactivePopGestureRecognizer?.delegate = self
     }
@@ -34,7 +34,7 @@ class BaseNavigationViewController: UINavigationController {
     }
 
     override func pushViewController(_ viewController: UIViewController, animated: Bool) {
-        if childViewControllers.count > 0 {
+        if children.count > 0 {
             viewController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
             viewController.navigationItem.leftBarButtonItems = backButtonItem
             viewController.hidesBottomBarWhenPushed = true

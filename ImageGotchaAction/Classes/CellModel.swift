@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import PhotoBrowser
+import HSPhotoKit
 
 enum CellModelType: Int {
     case image, video
@@ -16,7 +16,7 @@ enum CellModelType: Int {
 struct CellModel {
     var isSelected: Bool = false
     var isSaved: Bool = false
-    var photo: Photo = Photo(imageURL: nil, thumbnailImageURL: nil)
+    var photo: Photo?
     var videoUrl: URL?
     var cellModelType: CellModelType = .image
 }

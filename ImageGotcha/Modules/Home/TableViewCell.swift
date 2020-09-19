@@ -12,16 +12,14 @@ class TableViewCell: UITableViewCell {
     
     lazy var holderView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.greyBackground
-        view.layer.borderColor = UIColor.seperateColor.cgColor
-        view.layer.borderWidth = 0.5
+        view.layer.borderColor = Color.seperateColor.cgColor
+        view.layer.borderWidth = 1
         view.layer.cornerRadius = 5
         return view
     }()
     
     lazy var titileLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor.greyFont
         label.font = UIFont.boldSystemFont(ofSize: 18)
         return label
     }()
@@ -29,7 +27,7 @@ class TableViewCell: UITableViewCell {
     
     // MARK: - Initialization
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         baseInit()
@@ -48,7 +46,6 @@ extension TableViewCell {
     
     private func baseInit() {
         selectionStyle = .none
-        contentView.backgroundColor = UIColor.whiteBackground
         holderView.addSubview(titileLabel)
         contentView.addSubview(holderView)
         

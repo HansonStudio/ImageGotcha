@@ -34,9 +34,7 @@ class AboutViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.view.backgroundColor = UIColor.whiteBackground
-        self.title = LocalizedStr.about
+        title = LocalizedStr.about
         appNameLabel.text = "ImageGotcha " + AppState.version()
         logoImageView.layer.cornerRadius = 8
         logoImageView.layer.masksToBounds = true
@@ -106,14 +104,13 @@ extension AboutViewController: MFMailComposeViewControllerDelegate {
             controller.mailComposeDelegate = self
             controller.setSubject("ImageGotcha App Feedback")
             controller.setToRecipients([myMail]) //设置收件人
-//            controller.navigationBar.tintColor = UIColor.darkText
-            controller.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.darkText]
+            controller.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkText]
             self.present(controller, animated: true, completion: nil)
             
         } else {
             let mail = "mailto://" + myMail
             guard let mailUrl = URL(string: mail) else { return }
-            UIApplication.shared.openURL(mailUrl)
+            UIApplication.shared.open(mailUrl, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
         }
     }
     
@@ -131,7 +128,14 @@ extension AboutViewController: MFMailComposeViewControllerDelegate {
             print("邮件已保存")
         case .failed:
             print("邮件发送失败")
+        @unknown default:
+            break
         }
     }
 }
 
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
+}

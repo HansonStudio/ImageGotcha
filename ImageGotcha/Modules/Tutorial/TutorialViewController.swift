@@ -22,12 +22,11 @@ class TutorialViewController: UIViewController {
         super.viewDidLoad()
 
         title = LocalizedStr.tutorial
-        view.backgroundColor = UIColor.whiteBackground
         introduceLabel.text = LocalizedStr.introduce
         t1.text = LocalizedStr.openSafari
         t2.text = LocalizedStr.t2
-        t3.text = LocalizedStr.t3
-        t4.text = LocalizedStr.t4
+//        t3.text = LocalizedStr.t3
+//        t4.text = LocalizedStr.t4
         t5.text = LocalizedStr.t5
     }
 

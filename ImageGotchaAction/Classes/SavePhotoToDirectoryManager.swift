@@ -7,7 +7,8 @@
 //
 
 import UIKit
-import PhotoBrowser
+import HSPhotoKit
+import Kingfisher
 
 let AppGroupId: String = "group.com.hanson.imagegotcha"
 public typealias FinishHandler = () -> Void
@@ -31,18 +32,63 @@ class SavePhotoToDirectoryManager: NSObject {
 
 extension SavePhotoToDirectoryManager {
     func savePhotoToShareDirectory(photosToSave: [Photo], _ finishHandler: FinishHandler? = nil) {
+        let savingDispatchGroup = DispatchGroup()
+        
         for photo in photosToSave {
-            let imageUrl = photo.imageURL
-            if photo.hasCachedImage(imageUrl) {
-                guard let image = photo.getCachedImage(imageUrl), let imageUrl = imageUrl else { continue }
+            guard let imageUrl = photo.imageURL
+                , photo.hasCachedImage(imageUrl) else { continue }
+            
+            savingDispatchGroup.enter()
+            
+            photo.getCachedImage(imageUrl) { (image) in
+                guard let image = image else {
+                    savingDispatchGroup.leave()
+                    return
+                }
+                
                 if let data = DefaultCacheSerializer.default.data(with: image, original: nil) {
                     let imagePath = imageUrl.cacheKey.kf.md5
-                    let imagePahtUrl = saveImageShareDirectory?.appendingPathComponent(imagePath)
+                    let imagePahtUrl = self.saveImageShareDirectory?.appendingPathComponent(imagePath)
                     let isSaveSuccess = FileManager.default.createFile(atPath: imagePahtUrl!.path, contents: data, attributes: nil)
-                    print("imagePath: " + "\(String(describing: imagePahtUrl))" + "\\n save success? " + "\(isSaveSuccess)")
+                    print("--imagePath: " + "\(String(describing: imagePahtUrl))" + "\\n save success? " + "\(isSaveSuccess)")
+                }
+                
+                savingDispatchGroup.leave()
+            }
+        }
+        savingDispatchGroup.notify(queue: .main) {
+            print("---结束存储(SharedDirectory)---")
+            finishHandler?()
+        }
+    }
+    
+    func saveToSystemAlbum(photosToSave: [Photo], _ finishHandler: FinishHandler? = nil) {
+        let savingDispatchGroup = DispatchGroup()
+        
+        var imagesToSave = [UIImage]()
+        for photo in photosToSave {
+            guard let imageUrl = photo.imageURL
+                , photo.hasCachedImage(imageUrl) else { continue }
+            
+            savingDispatchGroup.enter()
+            
+            photo.getCachedImage(imageUrl) { (image) in
+                guard let image = image else {
+                    savingDispatchGroup.leave()
+                    return
+                }
+                imagesToSave.append(image)
+                
+                savingDispatchGroup.leave()
+            }
+        }
+        savingDispatchGroup.notify(queue: .main) {
+            SavePhotosManager.saveImageInAlbum(images: imagesToSave) { (result) in
+                DispatchQueue.main.async {
+                    print("---结束存储(SystemAlbum)---")
+                    finishHandler?()
                 }
             }
         }
-        finishHandler?()
     }
 }
