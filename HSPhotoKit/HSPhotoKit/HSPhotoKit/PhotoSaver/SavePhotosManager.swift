@@ -17,56 +17,83 @@ public enum SavePhotosResult {
 public typealias saveImageCompletion = (_ result: SavePhotosResult?) -> Void
 
 public class SavePhotosManager {
-    
-    class func isAuthorized() -> Bool {
-        return PHPhotoLibrary.authorizationStatus() == .authorized || PHPhotoLibrary.authorizationStatus() == .notDetermined
+
+    class func checkAuthorization(handler: @escaping (PHAuthorizationStatus) -> Void) {
+        var currentStatus: PHAuthorizationStatus
+        
+        if #available(iOSApplicationExtension 14, *) {
+            currentStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+        } else {
+            currentStatus = PHPhotoLibrary.authorizationStatus()
+        }
+        
+        switch currentStatus {
+        case .notDetermined:
+            if #available(iOSApplicationExtension 14, *) {
+                PHPhotoLibrary.requestAuthorization(for: .readWrite) { (status) in
+                    handler(status)
+                }
+            } else {
+                PHPhotoLibrary.requestAuthorization { (status) in
+                    handler(status)
+                }
+            }
+        default:
+            handler(currentStatus)
+        }
     }
     
     public class func saveImageInAlbum(images: [UIImage], completion: saveImageCompletion?) {
-        if !isAuthorized() {
-            completion?(.denied)
-            return
-        }
-        
-        var assetAlbum: PHAssetCollection!
-        let infoDictionary = Bundle.main.infoDictionary!
-        // 以 App 的名称作为相册名
-        let albumName: String = infoDictionary["CFBundleDisplayName"] as! String
-        
-        createAssetCollection(name: albumName) { (result) in
-            switch result {
-            case .success(let assetCollection):
-                assetAlbum = assetCollection
-            case .failure(let error):
-                print("相册创建失败：\(error.localizedDescription)")
-                // 相册创建失败，则保存到系统相册
-                let list = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: nil)
-                assetAlbum = list[0]
+        // 检查权限
+        checkAuthorization() { status in
+            
+            if #available(iOSApplicationExtension 14, *) {
+                guard status == .authorized || status == .limited else { completion?(.denied); return }
+            } else {
+                guard status == .authorized else { completion?(.denied); return }
             }
             
-            //保存图片
-            PHPhotoLibrary.shared().performChanges({
-                for image in images {
-                    let result = PHAssetChangeRequest.creationRequestForAsset(from: image)
-                    let assetPlaceholder = result.placeholderForCreatedAsset
-                    let albumChangeRequset = PHAssetCollectionChangeRequest(for: assetAlbum)
-                    albumChangeRequset!.addAssets([assetPlaceholder!] as NSArray)
+            // 以 App 的名称作为相册名
+            let infoDictionary = Bundle.main.infoDictionary!
+            let albumName: String = infoDictionary["CFBundleDisplayName"] as! String
+            
+            // 创建相册
+            createAssetCollection(name: albumName) { (result) in
+                var assetAlbum: PHAssetCollection?
+                switch result {
+                case .success(let assetCollection):
+                    assetAlbum = assetCollection
+                case .failure(let error):
+                    // 相册创建失败，则保存到系统相册
+                    print("--- Create Album Fail: \(error.localizedDescription)---")
                 }
-            }) { (isSuccess: Bool, error: Error?) in
-                if isSuccess {
-                    completion?(.success)
-                } else{
-                    print(error!.localizedDescription)
-                    completion?(.error)
+                
+                //保存图片
+                PHPhotoLibrary.shared().performChanges({
+                    for image in images {
+                        let result = PHAssetChangeRequest.creationRequestForAsset(from: image)
+                        if let album = assetAlbum {
+                            let assetPlaceholder = result.placeholderForCreatedAsset
+                            let albumChangeRequset = PHAssetCollectionChangeRequest(for: album)
+                            albumChangeRequset!.addAssets([assetPlaceholder!] as NSArray)
+                        }
+                    }
+                }) { (isSuccess: Bool, error: Error?) in
+                    if isSuccess {
+                        completion?(.success)
+                    } else{
+                        print(error!.localizedDescription)
+                        completion?(.error)
+                    }
                 }
             }
         }
     }
     
     public class func createAssetCollection(name: String, completion: @escaping (Result<PHAssetCollection, PhotoSaverError>) -> Void) {
-        // .limited 的授权状态，无法创建相册，但系统不会报错
+        // .limited 的授权状态，无法创建相册
         if #available(iOSApplicationExtension 14, *) {
-            guard PHPhotoLibrary.authorizationStatus() == .limited else {
+            guard PHPhotoLibrary.authorizationStatus(for: .readWrite) != .limited else {
                 completion(.failure(.limitedAccess))
                 return
             }
@@ -86,16 +113,17 @@ public class SavePhotosManager {
         // 不存在则创建指定相册
         if assetAlbum == nil {
             var createAlbumRequest: PHAssetCollectionChangeRequest!
+            var createdAlbumPlaceholder: PHObjectPlaceholder!
             PHPhotoLibrary.shared().performChanges {
                 createAlbumRequest = PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: name)
+                createdAlbumPlaceholder = createAlbumRequest.placeholderForCreatedAssetCollection
             } completionHandler: { (isSuccess, error) in
                 guard isSuccess else {
                     completion(.failure(.createAlbumFail(description: error?.localizedDescription ?? "unknown")))
                     return
                 }
-                let assetCollectionPlaceholder = createAlbumRequest.placeholderForCreatedAssetCollection
                 let fetchResult = PHAssetCollection.fetchAssetCollections(
-                                    withLocalIdentifiers: [assetCollectionPlaceholder.localIdentifier],
+                                    withLocalIdentifiers: [createdAlbumPlaceholder.localIdentifier],
                                     options: nil)
                 let assetCollection = fetchResult.firstObject
                 completion(.success(assetCollection!))
@@ -118,6 +146,25 @@ extension PhotoSaverError {
             return "权限不足"
         case .createAlbumFail(let description):
             return "创建相册失败: \(description)"
+        }
+    }
+}
+
+extension PHAuthorizationStatus {
+    var description: String {
+        switch self {
+        case .authorized:
+            return "authorized"
+        case .denied:
+            return "denied"
+        case .limited:
+            return "limited"
+        case .notDetermined:
+            return "notDetermined"
+        case .restricted:
+            return "restricted"
+        @unknown default:
+            return "unknown"
         }
     }
 }
