@@ -1,5 +1,5 @@
 //
-//  SavePhotoToDirectoryManager.swift
+//  PhotoSaver.swift
 //  ImageGotchaAction
 //
 //  Created by Hanson on 2018/5/7.
@@ -13,11 +13,13 @@ import Kingfisher
 let AppGroupId: String = "group.com.hanson.imagegotcha"
 public typealias FinishHandler = () -> Void
 
-class SavePhotoToDirectoryManager: NSObject {
+class PhotoSaver {
 
+    static let shared = PhotoSaver()
+    
     var saveImageShareDirectory: URL?
     
-    override init() {
+    private init() {
         let shareDictory = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppGroupId)
         let imageFolder = shareDictory!.appendingPathComponent("Images", isDirectory: true)
         let exist = FileManager.default.fileExists(atPath: imageFolder.path)
@@ -28,9 +30,7 @@ class SavePhotoToDirectoryManager: NSObject {
         
         print("group dictory: " + "\(String(describing: saveImageShareDirectory?.absoluteString))")
     }
-}
-
-extension SavePhotoToDirectoryManager {
+    
     func savePhotoToShareDirectory(photosToSave: [Photo], _ finishHandler: FinishHandler? = nil) {
         let savingDispatchGroup = DispatchGroup()
         

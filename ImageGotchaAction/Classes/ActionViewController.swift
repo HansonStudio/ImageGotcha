@@ -24,7 +24,6 @@ class ActionViewController: UIViewController {
     
     var photos: [Photo] = []
     var cellModels: [CellModel] = []
-    var savePhotoManager = SavePhotoToDirectoryManager()
     var photosToSave: [Photo] = []
     var videosToSave: [URL?] = []
 
@@ -85,10 +84,8 @@ class ActionViewController: UIViewController {
             }
         }
         if photosToSave.count > 0 || videosToSave.count > 0 {
-            showSaveAction { [weak self] in
-                self?.activityIndicator.stopAnimating()
+            showSaveAction(photos: photosToSave) { [weak self] in
                 self?.setUpMultiSelectState()
-                self?.showResultAlert()
             }
         }
     }
@@ -168,21 +165,7 @@ extension ActionViewController {
 
         collectionView.reloadData()
     }
-    
-    private func showResultAlert() {
-        let ac = UIAlertController(title: "", message: LocalizedStr.saveSuccess, preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: LocalizedStr.ok, style: .default))
         
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            UIApplication.presentedViewController(rootController: self)?.present(ac, animated: true, completion: nil)
-        } else {
-            let popoverController = ac.popoverPresentationController
-            popoverController?.sourceView = self.view
-            popoverController?.sourceRect = CGRect(x: view.bounds.width/2, y: view.bounds.height/2, width: 0, height: 0)
-            UIApplication.presentedViewController(rootController: self)?.present(ac, animated: true, completion: nil)
-        }
-    }
-    
     private func setUpMultiSelectState() {
         collectionView.isSwipeSelectingEnable = !isSelectState
         isSelectState = !isSelectState
@@ -200,47 +183,6 @@ extension ActionViewController {
                 selectAllButton.isSelected = false
             }
             self.collectionView.reloadData()
-        }
-    }
-}
-
-
-// MARK: - AlertController
-
-extension ActionViewController {
-    
-    func showSaveAction(_ finishHandler: (() -> Void)? = nil) {
-        let photosAboutToSave = self.photosToSave
-        
-        let alert = UIAlertController(title: nil, message: LocalizedStr.savePhoto, preferredStyle: .actionSheet)
-        // 保存到系统相册选项
-        let saveToSystemAlbumAction = UIAlertAction(title: LocalizedStr.saveToSystemAlbum, style: .default) { [weak self] (action) in
-            self?.activityIndicator.startAnimating()
-            self?.savePhotoManager.saveToSystemAlbum(photosToSave: photosAboutToSave) {
-                finishHandler?()
-            }
-        }
-        // 保存到App内相册选项
-        let saveToAppAlbumAction = UIAlertAction(title: LocalizedStr.saveToPrivateAlbum, style: .default) { [weak self] (action) in
-            self?.activityIndicator.startAnimating()
-            self?.savePhotoManager.savePhotoToShareDirectory(photosToSave: photosAboutToSave) {
-                finishHandler?()
-            }
-        }
-        // 取消选项
-        let cancelAction = UIAlertAction(title: LocalizedStr.cancel, style: .cancel, handler: nil)
-        
-        alert.addAction(saveToSystemAlbumAction)
-        alert.addAction(saveToAppAlbumAction)
-        alert.addAction(cancelAction)
-        
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            UIApplication.presentedViewController(rootController: self)?.present(alert, animated: true, completion: nil)
-        } else {
-            let popoverController = alert.popoverPresentationController
-            popoverController?.sourceView = self.view
-            popoverController?.sourceRect = CGRect(x: view.bounds.width/2, y: view.bounds.height, width: 0, height: 0)
-            UIApplication.presentedViewController(rootController: self)?.present(alert, animated: true, completion: nil)
         }
     }
 }
@@ -275,8 +217,6 @@ extension ActionViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cellModel = cellModels[indexPath.row]
-        
-        
         switch cellModel.cellModelType {
         case .image:
             let currentItem = collectionView.cellForItem(at: indexPath) as! ImageCollectionViewCell
@@ -295,18 +235,12 @@ extension ActionViewController: UICollectionViewDelegate {
                     return cell?.previewImageView
                 }
                 galleryPreview.longPressGestureHandler = { [weak self] (photo, gesture) in
-                    self?.photosToSave.removeAll()
-                    self?.photosToSave.append(photo as! Photo)
-                    self?.showSaveAction({
-                        self?.activityIndicator.stopAnimating()
-                    })
+                    guard let self = self else { return }
+                    self.saveSinglePhoto(photo as! Photo)
                 }
                 galleryPreview.actionButtonTappedHandler = { [weak self] (photo) in
-                    self?.photosToSave.removeAll()
-                    self?.photosToSave.append(photo as! Photo)
-                    self?.showSaveAction({
-                        self?.activityIndicator.stopAnimating()
-                    })
+                    guard let self = self else { return }
+                    self.saveSinglePhoto(photo as! Photo)
                 }
                 self.present(galleryPreview, animated: true, completion: nil)
             }
@@ -337,6 +271,12 @@ extension ActionViewController: UICollectionViewDelegate {
         let cell = cell as? ImageCollectionViewCell
         // 取消已经隐藏的 Cell 的下载任务
         cell?.previewImageView.kf.cancelDownloadTask()
+    }
+    
+    func saveSinglePhoto(_ photo: Photo) {
+        photosToSave.removeAll()
+        photosToSave.append(photo)
+        showSaveAction(photos: photosToSave)
     }
 }
 

@@ -10,7 +10,7 @@
 		079DD05724C0054400AEDF47 /* getImage.js in Resources */ = {isa = PBXBuildFile; fileRef = 079DD05624C0054400AEDF47 /* getImage.js */; };
 		0A5A3F4F76B7D26369ADAAAB /* Pods_ImageGotcha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C138288A9EB64AB75C3FE3A2 /* Pods_ImageGotcha.framework */; };
 		472EC899C94574A12AE44836 /* Pods_ImageGotchaAction.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F183BCA8DA86D0D9D931AC38 /* Pods_ImageGotchaAction.framework */; };
-		C0014E5D20A02CB900D68445 /* SavePhotoToDirectoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0014E5C20A02CB900D68445 /* SavePhotoToDirectoryManager.swift */; };
+		C0014E5D20A02CB900D68445 /* PhotoSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0014E5C20A02CB900D68445 /* PhotoSaver.swift */; };
 		C0014E6020A1A86B00D68445 /* AlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0014E5E20A1A86B00D68445 /* AlbumCollectionViewCell.swift */; };
 		C0014E6120A1A86B00D68445 /* AlbumCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C0014E5F20A1A86B00D68445 /* AlbumCollectionViewCell.xib */; };
 		C0082168209D4E8400797058 /* AlbumCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0082167209D4E8400797058 /* AlbumCollectionViewLayout.swift */; };
@@ -31,6 +31,7 @@
 		C0711488236EDE8800ED54BC /* SwipeSelectingGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0711486236EDE8800ED54BC /* SwipeSelectingGestureRecognizer.swift */; };
 		C0711489236EE8D800ED54BC /* SwipeSelectingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0711485236EDE8800ED54BC /* SwipeSelectingCollectionView.swift */; };
 		C071148A236EE8DA00ED54BC /* SwipeSelectingGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0711486236EDE8800ED54BC /* SwipeSelectingGestureRecognizer.swift */; };
+		C098E709252090AE00C19C02 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C098E708252090AE00C19C02 /* UIViewController+Extension.swift */; };
 		C09D7C5A233E6D84002219B2 /* String+MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09D7C59233E6D84002219B2 /* String+MD5.swift */; };
 		C09D7C5C233E710C002219B2 /* Color.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C09D7C5B233E710C002219B2 /* Color.xcassets */; };
 		C0B0DFF620A2D5EB000705E9 /* AlbumViewBottomToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B0DFF520A2D5EB000705E9 /* AlbumViewBottomToolBar.swift */; };
@@ -88,7 +89,7 @@
 /* Begin PBXFileReference section */
 		079DD05624C0054400AEDF47 /* getImage.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = getImage.js; sourceTree = "<group>"; };
 		6EEC2EEE6FD3E0B6B752DC74 /* Pods-ImageGotcha.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImageGotcha.release.xcconfig"; path = "Pods/Target Support Files/Pods-ImageGotcha/Pods-ImageGotcha.release.xcconfig"; sourceTree = "<group>"; };
-		C0014E5C20A02CB900D68445 /* SavePhotoToDirectoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavePhotoToDirectoryManager.swift; sourceTree = "<group>"; };
+		C0014E5C20A02CB900D68445 /* PhotoSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSaver.swift; sourceTree = "<group>"; };
 		C0014E5E20A1A86B00D68445 /* AlbumCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollectionViewCell.swift; sourceTree = "<group>"; };
 		C0014E5F20A1A86B00D68445 /* AlbumCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlbumCollectionViewCell.xib; sourceTree = "<group>"; };
 		C0082167209D4E8400797058 /* AlbumCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollectionViewLayout.swift; sourceTree = "<group>"; };
@@ -117,6 +118,7 @@
 		C0711486236EDE8800ED54BC /* SwipeSelectingGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeSelectingGestureRecognizer.swift; sourceTree = "<group>"; };
 		C07925D420FE517800AD8B31 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		C08D8C09204F92CE009A1F0D /* ImageGotcha.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageGotcha.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C098E708252090AE00C19C02 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		C09D7C59233E6D84002219B2 /* String+MD5.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+MD5.swift"; sourceTree = "<group>"; };
 		C09D7C5B233E710C002219B2 /* Color.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Color.xcassets; sourceTree = "<group>"; };
 		C0B0DFF520A2D5EB000705E9 /* AlbumViewBottomToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumViewBottomToolBar.swift; sourceTree = "<group>"; };
@@ -248,9 +250,18 @@
 			path = ImageGotcha;
 			sourceTree = "<group>";
 		};
+		C098E7072520909100C19C02 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				C098E708252090AE00C19C02 /* UIViewController+Extension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		C0D7F5872085ABEF00EFB208 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				C0014E5C20A02CB900D68445 /* PhotoSaver.swift */,
 				C09D7C59233E6D84002219B2 /* String+MD5.swift */,
 			);
 			path = Common;
@@ -263,6 +274,7 @@
 				C0E40E37208C9D3B0077F3AA /* ImageGotchaAction.entitlements */,
 				C0D8284A2060EDCE00009F62 /* Classes */,
 				C0D7F5872085ABEF00EFB208 /* Common */,
+				C098E7072520909100C19C02 /* Extension */,
 				C0D828402060ED7300009F62 /* MainInterface.storyboard */,
 				C0D828432060ED7300009F62 /* Info.plist */,
 				C0BC75122068A2F7000522DF /* Media.xcassets */,
@@ -277,7 +289,6 @@
 				C0D8287F2060EE5100009F62 /* ImageCollectionViewCell.swift */,
 				C03A6AF5210F0930000132F5 /* VideoCollectionViewCell.swift */,
 				C0F8F17120808B23002920AC /* BasicCollectionViewFlowLayout.swift */,
-				C0014E5C20A02CB900D68445 /* SavePhotoToDirectoryManager.swift */,
 				C03A6AF3210F08D4000132F5 /* CellModel.swift */,
 			);
 			path = Classes;
@@ -602,11 +613,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				C03A6AF6210F0930000132F5 /* VideoCollectionViewCell.swift in Sources */,
+				C098E709252090AE00C19C02 /* UIViewController+Extension.swift in Sources */,
 				C021B02220A6A33300A1F7CA /* StringAsset.swift in Sources */,
 				C0D828802060EE5100009F62 /* ImageCollectionViewCell.swift in Sources */,
 				C0711489236EE8D800ED54BC /* SwipeSelectingCollectionView.swift in Sources */,
 				C09D7C5A233E6D84002219B2 /* String+MD5.swift in Sources */,
-				C0014E5D20A02CB900D68445 /* SavePhotoToDirectoryManager.swift in Sources */,
+				C0014E5D20A02CB900D68445 /* PhotoSaver.swift in Sources */,
 				C0F8F17220808B23002920AC /* BasicCollectionViewFlowLayout.swift in Sources */,
 				C071148A236EE8DA00ED54BC /* SwipeSelectingGestureRecognizer.swift in Sources */,
 				C0D8284C2060EDCE00009F62 /* ActionViewController.swift in Sources */,
