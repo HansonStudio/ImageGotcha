@@ -154,7 +154,7 @@ extension ActionViewController {
             cellModels.append(cellModel)
         }
         
-        let imageUrlSet = Set(imageUrls)
+        let imageUrlSet = imageUrls.removeDuplicate()
         for urlString in Array(imageUrlSet) {
             var cellModel = CellModel()
             let photo = Photo(urlString: urlString)
@@ -329,3 +329,11 @@ extension ActionViewController {
     }
 }
 
+public extension Array where Element: Equatable {
+    /// 去除数组重复元素
+    func removeDuplicate() -> Array {
+       return self.enumerated()
+        .filter { self.firstIndex(of: $0.element) == $0.offset }
+        .map { $0.element }
+    }
+}
