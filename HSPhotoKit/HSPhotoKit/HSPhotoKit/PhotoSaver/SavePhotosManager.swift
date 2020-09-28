@@ -14,11 +14,11 @@ public enum SavePhotosResult {
     case success, error, denied
 }
 
-public typealias saveImageCompletion = (_ result: SavePhotosResult?) -> Void
+public typealias saveImageCompletion = (_ result: SavePhotosResult) -> Void
 
 public class SavePhotosManager {
 
-    class func checkAuthorization(handler: @escaping (PHAuthorizationStatus) -> Void) {
+    public class func checkAuthorization(handler: @escaping (PHAuthorizationStatus) -> Void) {
         var currentStatus: PHAuthorizationStatus
         
         if #available(iOSApplicationExtension 14, *) {
@@ -43,14 +43,14 @@ public class SavePhotosManager {
         }
     }
     
-    public class func saveImageInAlbum(images: [UIImage], completion: saveImageCompletion?) {
+    public class func saveImageInAlbum(images: [UIImage], completion: @escaping saveImageCompletion) {
         // 检查权限
         checkAuthorization() { status in
             
             if #available(iOSApplicationExtension 14, *) {
-                guard status == .authorized || status == .limited else { completion?(.denied); return }
+                guard status == .authorized || status == .limited else { completion(.denied); return }
             } else {
-                guard status == .authorized else { completion?(.denied); return }
+                guard status == .authorized else { completion(.denied); return }
             }
             
             // 以 App 的名称作为相册名
@@ -69,7 +69,7 @@ public class SavePhotosManager {
                 }
                 
                 //保存图片
-                PHPhotoLibrary.shared().performChanges({
+                PHPhotoLibrary.shared().performChanges {
                     for image in images {
                         let result = PHAssetChangeRequest.creationRequestForAsset(from: image)
                         if let album = assetAlbum {
@@ -78,12 +78,12 @@ public class SavePhotosManager {
                             albumChangeRequset!.addAssets([assetPlaceholder!] as NSArray)
                         }
                     }
-                }) { (isSuccess: Bool, error: Error?) in
+                } completionHandler: { (isSuccess, error) in
                     if isSuccess {
-                        completion?(.success)
+                        completion(.success)
                     } else{
                         print(error!.localizedDescription)
-                        completion?(.error)
+                        completion(.error)
                     }
                 }
             }

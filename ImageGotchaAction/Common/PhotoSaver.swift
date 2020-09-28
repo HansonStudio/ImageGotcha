@@ -11,7 +11,7 @@ import HSPhotoKit
 import Kingfisher
 
 let AppGroupId: String = "group.com.hanson.imagegotcha"
-public typealias FinishHandler = () -> Void
+public typealias FinishHandler = (_ isSuccess: Bool) -> Void
 
 class PhotoSaver {
 
@@ -58,7 +58,7 @@ class PhotoSaver {
         }
         savingDispatchGroup.notify(queue: .main) {
             print("---结束存储(SharedDirectory)---")
-            finishHandler?()
+            finishHandler?(true)
         }
     }
     
@@ -86,7 +86,13 @@ class PhotoSaver {
             SavePhotosManager.saveImageInAlbum(images: imagesToSave) { (result) in
                 DispatchQueue.main.async {
                     print("---结束存储(SystemAlbum)---")
-                    finishHandler?()
+                    switch result {
+                    case .success:
+                        finishHandler?(true)
+                    case .error, .denied:
+                        finishHandler?(false)
+                    }
+                    
                 }
             }
         }

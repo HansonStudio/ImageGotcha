@@ -16,18 +16,18 @@ extension UIViewController {
         // 保存到系统相册选项
         let saveToSystemAlbumAction = UIAlertAction(title: LocalizedStr.saveToSystemAlbum, style: .default) { [weak self] (action) in
             self?.showActivityIndicator()
-            PhotoSaver.shared.saveToSystemAlbum(photosToSave: photos) {
+            PhotoSaver.shared.saveToSystemAlbum(photosToSave: photos) { isSuccess in
                 self?.dismissActivityIndicator()
-                self?.showResultAlert()
+                self?.showResultAlert(isSuccess: isSuccess)
                 finishHandler?()
             }
         }
         // 保存到App内相册选项
         let saveToAppAlbumAction = UIAlertAction(title: LocalizedStr.saveToPrivateAlbum, style: .default) { [weak self] (action) in
             self?.showActivityIndicator()
-            PhotoSaver.shared.savePhotoToShareDirectory(photosToSave: photos) {
+            PhotoSaver.shared.savePhotoToShareDirectory(photosToSave: photos) { isSuccess in
                 self?.dismissActivityIndicator()
-                self?.showResultAlert()
+                self?.showResultAlert(isSuccess: isSuccess)
                 finishHandler?()
             }
         }
@@ -41,8 +41,9 @@ extension UIViewController {
         showAlert(alert)
     }
     
-    func showResultAlert() {
-        let alert = UIAlertController(title: "", message: LocalizedStr.saveSuccess, preferredStyle: .alert)
+    func showResultAlert(isSuccess: Bool) {
+        let message = isSuccess ? LocalizedStr.saveSuccess : LocalizedStr.saveFail
+        let alert = UIAlertController(title: "", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: LocalizedStr.ok, style: .default))
         showAlert(alert)
     }
