@@ -31,7 +31,7 @@ extension KingfisherWrapper where Base: KFCrossPlatformImageView {
         }
         
         if let dataProvider = photo.imageDataProvider, photo.isBase64Image {
-            setImage(with: dataProvider, options: options) { result in
+            setImage(with: dataProvider, options: options, completionHandler:  { result in
                 completionHandler?(result)
                 #if DEBUG
                 switch result {
@@ -41,9 +41,9 @@ extension KingfisherWrapper where Base: KFCrossPlatformImageView {
                     print("---加载图片出错(Base64)：\(error.localizedDescription)")
                 }
                 #endif
-            }
+            })
         } else if let url = photo.imageURL {
-            setImage(with: url, options: options) { result in
+            setImage(with: url, options: options, completionHandler:  { result in
                 completionHandler?(result)
                 #if DEBUG
                 switch result {
@@ -55,7 +55,7 @@ extension KingfisherWrapper where Base: KFCrossPlatformImageView {
                     break
                 }
                 #endif
-            }
+            })
         }
     }
 }
