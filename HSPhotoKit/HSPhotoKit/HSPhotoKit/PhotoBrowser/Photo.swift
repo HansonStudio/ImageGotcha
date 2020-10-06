@@ -9,7 +9,8 @@
 import Foundation
 import UIKit
 import Kingfisher
-
+import KingfisherWebP
+import Photos
 
 public protocol PhotoViewable: class {
     var image: UIImage? { get }
@@ -75,12 +76,13 @@ public class Photo: PhotoViewable {
             completion(nil)
             return
         }
+        let options: [KingfisherOptionsInfoItem] = [.processor(WebPProcessor.default)]
         let cacheType = ImageCache.default.imageCachedType(forKey: cacheKey)
         if cacheType == .memory {
-            let cachedImage = ImageCache.default.retrieveImageInMemoryCache(forKey: cacheKey)
+            let cachedImage = ImageCache.default.retrieveImageInMemoryCache(forKey: cacheKey, options: options)
             completion(cachedImage)
         } else if cacheType == .disk {
-            ImageCache.default.retrieveImageInDiskCache(forKey: cacheKey) { result in
+            ImageCache.default.retrieveImageInDiskCache(forKey: cacheKey, options: options) { result in
                 switch result {
                 case .success(let image):
                     completion(image)
@@ -98,7 +100,7 @@ public class Photo: PhotoViewable {
 
     func loadImageWithURL(_ url: URL?, completion: @escaping (_ image: UIImage?, _ error: Error?) -> ()) {
         guard let url = url else { return }
-        ImageDownloader.default.downloadImage(with: url, options: nil) { (result) in
+        ImageDownloader.default.downloadImage(with: url, options: nil, completionHandler:  { (result) in
             switch result {
             case .success(let loadingResult):
                 let image = loadingResult.image
@@ -107,7 +109,7 @@ public class Photo: PhotoViewable {
             case .failure(_):
                 completion(nil, NSError(domain: "PhotoDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "Couldn't load image"]))
             }
-        }
+        })
     }
 }
 

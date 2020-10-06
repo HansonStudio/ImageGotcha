@@ -1,7 +1,22 @@
 PODS:
   - HSPhotoKit (0.1.0):
     - Kingfisher/Core
+    - KingfisherWebP
+  - Kingfisher (5.14.1):
+    - Kingfisher/Core (= 5.14.1)
   - Kingfisher/Core (5.14.1)
+  - KingfisherWebP (1.0.0):
+    - Kingfisher (~> 5.8)
+    - libwebp (>= 0.5.0)
+  - libwebp (1.1.0):
+    - libwebp/demux (= 1.1.0)
+    - libwebp/mux (= 1.1.0)
+    - libwebp/webp (= 1.1.0)
+  - libwebp/demux (1.1.0):
+    - libwebp/webp
+  - libwebp/mux (1.1.0):
+    - libwebp/demux
+  - libwebp/webp (1.1.0)
   - Reusable (4.1.1):
     - Reusable/Storyboard (= 4.1.1)
     - Reusable/View (= 4.1.1)
@@ -17,6 +32,8 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Kingfisher
+    - KingfisherWebP
+    - libwebp
     - Reusable
     - SnapKit
 
@@ -25,11 +42,13 @@ EXTERNAL SOURCES:
     :path: HSPhotoKit/.
 
 SPEC CHECKSUMS:
-  HSPhotoKit: 4299fca1156890f78f825fdd984f10325b681672
+  HSPhotoKit: 1386fde6413959dc2a26f9d6cddae0255ba69ba0
   Kingfisher: 8050bc6f7f68cbf3908bd04df7ccbac188f6d6d6
+  KingfisherWebP: b1ed1dbc5e52547c5bf5f583dd5c46346f97320f
+  libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
   Reusable: 53a9acf5c536f229b31b5865782414b508252ddb
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
 PODFILE CHECKSUM: db8fd1a2152459610af293a3c472e4b43b015ea3
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.10.0.rc.1

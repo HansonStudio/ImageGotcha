@@ -6,6 +6,7 @@
 //
 
 import Kingfisher
+import KingfisherWebP
 
 extension KingfisherWrapper where Base: KFCrossPlatformImageView {
     
@@ -14,6 +15,8 @@ extension KingfisherWrapper where Base: KFCrossPlatformImageView {
         let modifier = AnyModifier { request in
             var r = request
             r.setValue("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1", forHTTPHeaderField: "user-agent")
+            // 支持 webp
+            r.addValue("image/webp */*", forHTTPHeaderField: "Accept")
             return r
         }
         
@@ -21,14 +24,17 @@ extension KingfisherWrapper where Base: KFCrossPlatformImageView {
             .transition(.fade(0.2)),
             .requestModifier(modifier)
         ]
+        var processor: ImageProcessor = WebPProcessor.default
         if let size = size {
-            let samplingImageOptions: [KingfisherOptionsInfoItem] = [
-                .processor(DownsamplingImageProcessor(size: size)),
-                .scaleFactor(UIScreen.main.scale),
-                .cacheOriginalImage
-            ]
-            options.append(contentsOf: samplingImageOptions)
+            processor = processor |> DownsamplingImageProcessor(size: size)
         }
+        let samplingImageOptions: [KingfisherOptionsInfoItem] = [
+            .processor(processor),
+            .scaleFactor(UIScreen.main.scale),
+            .cacheOriginalImage,
+            .cacheSerializer(WebPSerializer.default)
+        ]
+        options.append(contentsOf: samplingImageOptions)
         
         if let dataProvider = photo.imageDataProvider, photo.isBase64Image {
             setImage(with: dataProvider, options: options, completionHandler:  { result in
