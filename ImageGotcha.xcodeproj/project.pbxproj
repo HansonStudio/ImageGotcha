@@ -24,6 +24,7 @@
 		C021B02720A6D1D400A1F7CA /* TutorialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C021B02520A6D1D400A1F7CA /* TutorialViewController.xib */; };
 		C03A6AF4210F08D4000132F5 /* CellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03A6AF3210F08D4000132F5 /* CellModel.swift */; };
 		C03A6AF6210F0930000132F5 /* VideoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03A6AF5210F0930000132F5 /* VideoCollectionViewCell.swift */; };
+		C063D64A25599BB800B1952E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C063D64925599BB800B1952E /* SceneDelegate.swift */; };
 		C06D90752098768C00F9F9C6 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06D90742098768C00F9F9C6 /* Constant.swift */; };
 		C06D908220987B5000F9F9C6 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06D908020987B5000F9F9C6 /* AboutViewController.swift */; };
 		C06D908320987B5000F9F9C6 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C06D908120987B5000F9F9C6 /* AboutViewController.xib */; };
@@ -111,6 +112,7 @@
 		C03A6AF3210F08D4000132F5 /* CellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellModel.swift; sourceTree = "<group>"; };
 		C03A6AF5210F0930000132F5 /* VideoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCollectionViewCell.swift; sourceTree = "<group>"; };
 		C03F4329204FD71E0050C643 /* ImageGotcha.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ImageGotcha.entitlements; sourceTree = "<group>"; };
+		C063D64925599BB800B1952E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		C06D90742098768C00F9F9C6 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		C06D908020987B5000F9F9C6 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		C06D908120987B5000F9F9C6 /* AboutViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AboutViewController.xib; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				C0E40E0E208C8F020077F3AA /* AppDelegate.swift */,
+				C063D64925599BB800B1952E /* SceneDelegate.swift */,
 				C0E40E11208C8F020077F3AA /* Modules */,
 				C0E40E24208C8F700077F3AA /* Extension */,
 				C06D90732098767700F9F9C6 /* Common */,
@@ -607,6 +610,7 @@
 				C0082168209D4E8400797058 /* AlbumCollectionViewLayout.swift in Sources */,
 				C0E40E2E208C8F700077F3AA /* UIColor+Extension.swift in Sources */,
 				C0711488236EDE8800ED54BC /* SwipeSelectingGestureRecognizer.swift in Sources */,
+				C063D64A25599BB800B1952E /* SceneDelegate.swift in Sources */,
 				C0014E6020A1A86B00D68445 /* AlbumCollectionViewCell.swift in Sources */,
 				C0E40E30208C8F700077F3AA /* BaseNavigationViewController.swift in Sources */,
 			);
