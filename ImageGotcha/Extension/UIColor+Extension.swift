@@ -21,19 +21,20 @@ extension UIColor {
                 let alphaHexStr = hexStr.substring(from: 6)
                 hexStr = hexStr.substring(to: 6) as NSString
                 
-                var alphaHexValue: UInt32 = 0
+                var alphaHexValue: UInt64 = 0
                 let alphaScanner = Scanner(string: alphaHexStr)
-                if alphaScanner.scanHexInt32(&alphaHexValue) {
+                if alphaScanner.scanHexInt64(&alphaHexValue) {
                     let alphaHex = Int(alphaHexValue)
                     alpha = CGFloat(alphaHex & 0x000000FF) / 255.0
                 } else {
-                    
+                    print("scan alphaHex error")
                 }
             }
             
             let rgbScanner = Scanner(string: hexStr as String)
-            var hexValue: UInt32 = 0
-            if rgbScanner.scanHexInt32(&hexValue) {
+            
+            var hexValue: UInt64 = 0
+            if rgbScanner.scanHexInt64(&hexValue) {
                 if hexStr.length == 6 {
                     let hex = Int(hexValue)
                     red   = CGFloat((hex & 0xFF0000) >> 16) / 255.0
@@ -43,7 +44,7 @@ extension UIColor {
                     print("invalid rgb string, length should be 6")
                 }
             } else {
-                //dPrint("scan hex error")
+                print("scan hex error")
             }
         } else {
             print("invalid rgb string, missing '#' as prefix")
