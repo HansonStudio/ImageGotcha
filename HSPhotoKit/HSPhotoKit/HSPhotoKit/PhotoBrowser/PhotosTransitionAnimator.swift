@@ -102,9 +102,9 @@ extension PhotosTransitionAnimator {
         containerView.addSubview(snapView)
         endingView.alpha = 0.0
         startingView.alpha = 0.0
-        let slideDown = snapView.center.y > UIScreen.main.bounds.midY
+        let slideDown = snapView.center.y > UIScreen.universalBounds.midY
         var finalFrame = originFrame
-        finalFrame.origin.y = slideDown ? UIScreen.main.bounds.height : -originFrame.height
+        finalFrame.origin.y = slideDown ? UIScreen.universalBounds.height : -originFrame.height
         UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0.0, usingSpringWithDamping:CGFloat(zoomingAnimationSpringDamping), initialSpringVelocity:0, options: [], animations: { () -> Void in
             snapView.frame = finalFrame
             endingView.alpha = 1.0
@@ -133,7 +133,7 @@ extension PhotosTransitionAnimator {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        let screenBounds = UIScreen.main.bounds
+        let screenBounds = UIScreen.universalBounds
         var endingViewFrame = endingView.frame
         if endingView.frame.equalTo(CGRect.zero) {
             endingViewFrame = screenBounds
@@ -221,16 +221,16 @@ extension PhotosTransitionAnimator {
     }
     
     private func isLongPhoto(for imageSize: CGSize) -> Bool {
-        let realHeight = UIScreen.main.bounds.width * CGFloat(imageSize.height) / CGFloat(imageSize.width)
+        let realHeight = UIScreen.universalBounds.width * CGFloat(imageSize.height) / CGFloat(imageSize.width)
         
-        return realHeight >= UIScreen.main.bounds.height
+        return realHeight >= UIScreen.universalBounds.height
     }
     
     private func getFinalFrame(_ image: UIImage?) -> CGRect {
         var frame = CGRect.zero
         if let size = image?.size {
             var realSize = size
-            let screenBounds = UIScreen.main.bounds
+            let screenBounds = UIScreen.universalBounds
             let imageWidth = screenBounds.width
             realSize.width = imageWidth
             realSize.height = ceil(imageWidth * size.height / size.width)

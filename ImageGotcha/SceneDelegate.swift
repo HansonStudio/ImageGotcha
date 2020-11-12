@@ -31,42 +31,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         setWindowSizeRestrictionForMac()
         #endif
-        
-        
     }
     
-    func setWindowSizeRestrictionForMac() {
+    func windowScene(_ windowScene: UIWindowScene, didUpdate previousCoordinateSpace: UICoordinateSpace, interfaceOrientation previousInterfaceOrientation: UIInterfaceOrientation, traitCollection previousTraitCollection: UITraitCollection) {
+            // print("\(windowScene.coordinateSpace.bounds)")
+    }
+    
+    private func setWindowSizeRestrictionForMac() {
         UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.forEach { windowScene in
             windowScene.sizeRestrictions?.minimumSize = CGSize(width: 800, height: 800)
         }
-    }
-    
-    func sceneDidDisconnect(_ scene: UIScene) {
-        
-    }
-    
-    func sceneDidBecomeActive(_ scene: UIScene) {
-        
-    }
-    
-    func sceneWillResignActive(_ scene: UIScene) {
-        
-    }
-    
-    func sceneWillEnterForeground(_ scene: UIScene) {
-
-    }
-    
-    func sceneDidEnterBackground(_ scene: UIScene) {
-        print("App entered background")
-    }
-    
-    @objc func unlockPressed(sender: UIButton) {
-
-    }
-    
-    func renumberBadgesOfPendingNotifications() {
-
     }
 }
 

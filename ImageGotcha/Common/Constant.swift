@@ -8,11 +8,7 @@
 
 import UIKit
 
-let ScreenWidth = UIScreen.main.bounds.width
-let ScreenHeight = UIScreen.main.bounds.height
-
 let AppGroupId: String = "group.com.hanson.imagegotcha"
-
 
 enum Color {
 //    public static let background = UIColor(named: "background")

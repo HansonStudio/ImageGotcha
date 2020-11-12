@@ -39,7 +39,7 @@ extension BasicCollectionViewFlowLayout {
             itemNum = 6
         }
         let itemSpace = 5 * (itemNum - 1)
-        let itemWidth = (ScreenWidth - itemSpace) / itemNum
+        let itemWidth = (UIScreen.universalBounds.width - itemSpace) / itemNum
         self.itemSize = CGSize(width: itemWidth, height: itemWidth)
         self.scrollDirection = .vertical
         self.minimumLineSpacing = 5

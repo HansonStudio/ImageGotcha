@@ -287,7 +287,7 @@ extension AlbumViewController: UICollectionViewDelegate, UICollectionViewDataSou
 extension AlbumViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var itemNum: CGFloat = 3
-        var windowWidth = ScreenWidth
+        let windowWidth = UIScreen.universalBounds.width
         if UIDevice.current.userInterfaceIdiom == .pad {
             if UIDevice.current.orientation.isLandscape {
                 itemNum = 6
@@ -297,9 +297,6 @@ extension AlbumViewController: UICollectionViewDelegateFlowLayout {
         }
         #if targetEnvironment(macCatalyst)
         itemNum = 6
-        if let windowBounds = UIApplication.shared.activeWindowScene?.coordinateSpace.bounds {
-            windowWidth = windowBounds.width
-        }
         #endif
         let itemSpace = 5 * (itemNum - 1)
         let itemWidth = (windowWidth - itemSpace) / itemNum

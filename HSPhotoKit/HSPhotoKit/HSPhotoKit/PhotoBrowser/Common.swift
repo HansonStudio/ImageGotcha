@@ -8,8 +8,18 @@
 
 import UIKit
 
-public let ScreenWidth = UIScreen.main.bounds.width
-public let ScreenHeight = UIScreen.main.bounds.height
+extension UIScreen {
+    public static var universalBounds: CGRect {
+        #if targetEnvironment(macCatalyst)
+        if let bounds = UIApplication.shared.activeWindowScene?.coordinateSpace.bounds {
+            return bounds
+        }
+        return UIScreen.main.bounds
+        #else
+        return UIScreen.main.bounds
+        #endif
+    }
+}
 
 /// Debug 时候打印信息
 ///

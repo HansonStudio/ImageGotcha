@@ -104,7 +104,6 @@ public class PhotosViewController: UIViewController, UIPageViewControllerDataSou
         statusBarHidden = true
         self.setNeedsStatusBarAppearanceUpdate()
         navigationController?.navigationBar.isHidden = true
-
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -197,13 +196,16 @@ public class PhotosViewController: UIViewController, UIPageViewControllerDataSou
 
 extension PhotosViewController {
     private func initialSetupWith(_ initialPhoto: PhotoViewable? = nil, _ referenceView: UIView? = nil) {
+        var startingPhoto: PhotoViewable?
         if let photo = initialPhoto, dataSource.containsPhoto(photo) {
-            setUpPageViewController(photo)
-            setUpTransition(startingView: referenceView, startingPhoto: photo)
-            
+            startingPhoto = photo
         } else if let photo = dataSource.photos.first {
-            setUpPageViewController(photo)
-            setUpTransition(startingView: referenceView, startingPhoto: photo)
+            startingPhoto = photo
+        }
+        
+        if let startingPhoto = startingPhoto {
+            setUpPageViewController(startingPhoto)
+            setUpTransition(startingView: referenceView, startingPhoto: startingPhoto)
         }
         
         setupOverlayView()
@@ -278,6 +280,7 @@ extension PhotosViewController {
         let backgroundView = UIView()
         backgroundView.frame = view.bounds
         backgroundView.backgroundColor = UIColor.gray
+        backgroundView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         let blurContentView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
         blurContentView.frame = backgroundView.bounds
         blurContentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]

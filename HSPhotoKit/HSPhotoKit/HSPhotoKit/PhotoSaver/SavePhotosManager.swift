@@ -8,6 +8,8 @@
 
 import UIKit
 import Photos
+import Kingfisher
+import KingfisherWebP
 
 //操作结果
 public enum SavePhotosResult {
@@ -18,10 +20,11 @@ public typealias saveImageCompletion = (_ result: SavePhotosResult) -> Void
 
 public class SavePhotosManager {
 
+    
     public class func checkAuthorization(handler: @escaping (PHAuthorizationStatus) -> Void) {
         var currentStatus: PHAuthorizationStatus
         
-        if #available(iOSApplicationExtension 14, *) {
+        if #available(iOS 14, *) {
             currentStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         } else {
             currentStatus = PHPhotoLibrary.authorizationStatus()
@@ -29,7 +32,7 @@ public class SavePhotosManager {
         
         switch currentStatus {
         case .notDetermined:
-            if #available(iOSApplicationExtension 14, *) {
+            if #available(iOS 14, *) {
                 PHPhotoLibrary.requestAuthorization(for: .readWrite) { (status) in
                     handler(status)
                 }
@@ -47,7 +50,7 @@ public class SavePhotosManager {
         // 检查权限
         checkAuthorization() { status in
             
-            if #available(iOSApplicationExtension 14, *) {
+            if #available(iOS 14, *) {
                 guard status == .authorized || status == .limited else { completion(.denied); return }
             } else {
                 guard status == .authorized else { completion(.denied); return }
@@ -81,8 +84,8 @@ public class SavePhotosManager {
                 } completionHandler: { (isSuccess, error) in
                     if isSuccess {
                         completion(.success)
-                    } else{
-                        print(error!.localizedDescription)
+                    } else {
+                        print("--- PHAssetChangeRequest Error: \(error!.localizedDescription)")
                         completion(.error)
                     }
                 }
@@ -92,7 +95,7 @@ public class SavePhotosManager {
     
     public class func createAssetCollection(name: String, completion: @escaping (Result<PHAssetCollection, PhotoSaverError>) -> Void) {
         // .limited 的授权状态，无法创建相册
-        if #available(iOSApplicationExtension 14, *) {
+        if #available(iOS 14, *) {
             guard PHPhotoLibrary.authorizationStatus(for: .readWrite) != .limited else {
                 completion(.failure(.limitedAccess))
                 return
@@ -165,6 +168,21 @@ extension PHAuthorizationStatus {
             return "restricted"
         @unknown default:
             return "unknown"
+        }
+    }
+}
+
+extension ImageFormat {
+    var fileExtension: String {
+        switch self {
+        case .GIF:
+            return ".gif"
+        case .JPEG:
+            return ".jpeg"
+        case .PNG:
+            return ".png"
+        case .unknown:
+            return ".jpg"
         }
     }
 }
