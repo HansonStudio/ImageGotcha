@@ -57,6 +57,9 @@ extension ScalingImageView {
     private func setupImageScrollView() {
         showsVerticalScrollIndicator = false
         showsHorizontalScrollIndicator = false
+        #if targetEnvironment(macCatalyst)
+        showsVerticalScrollIndicator = true
+        #endif
         bouncesZoom = true
         minimumZoomScale = 1
         maximumZoomScale = 2
