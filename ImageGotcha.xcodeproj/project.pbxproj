@@ -13,7 +13,6 @@
 		C0014E5D20A02CB900D68445 /* PhotoSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0014E5C20A02CB900D68445 /* PhotoSaver.swift */; };
 		C0014E6020A1A86B00D68445 /* AlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0014E5E20A1A86B00D68445 /* AlbumCollectionViewCell.swift */; };
 		C0014E6120A1A86B00D68445 /* AlbumCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C0014E5F20A1A86B00D68445 /* AlbumCollectionViewCell.xib */; };
-		C0082168209D4E8400797058 /* AlbumCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0082167209D4E8400797058 /* AlbumCollectionViewLayout.swift */; };
 		C021B00E20A5896600A1F7CA /* OpenSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C021B00D20A5896600A1F7CA /* OpenSourceViewController.swift */; };
 		C021B01520A5969700A1F7CA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C021B01720A5969700A1F7CA /* Localizable.strings */; };
 		C021B01E20A69C6F00A1F7CA /* StringAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = C021B01C20A69C6F00A1F7CA /* StringAsset.swift */; };
@@ -37,6 +36,7 @@
 		C09D7C5C233E710C002219B2 /* Color.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C09D7C5B233E710C002219B2 /* Color.xcassets */; };
 		C0B0DFF620A2D5EB000705E9 /* AlbumViewBottomToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B0DFF520A2D5EB000705E9 /* AlbumViewBottomToolBar.swift */; };
 		C0BC75132068A2F7000522DF /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0BC75122068A2F7000522DF /* Media.xcassets */; };
+		C0C5016D255CE26200C0ED38 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C5016C255CE26200C0ED38 /* UIApplication+Extension.swift */; };
 		C0D828422060ED7300009F62 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C0D828402060ED7300009F62 /* MainInterface.storyboard */; };
 		C0D828462060ED7300009F62 /* ImageGotchaAction.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = C0D8283C2060ED7300009F62 /* ImageGotchaAction.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C0D8284C2060EDCE00009F62 /* ActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D8284B2060EDCE00009F62 /* ActionViewController.swift */; };
@@ -93,7 +93,6 @@
 		C0014E5C20A02CB900D68445 /* PhotoSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSaver.swift; sourceTree = "<group>"; };
 		C0014E5E20A1A86B00D68445 /* AlbumCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollectionViewCell.swift; sourceTree = "<group>"; };
 		C0014E5F20A1A86B00D68445 /* AlbumCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlbumCollectionViewCell.xib; sourceTree = "<group>"; };
-		C0082167209D4E8400797058 /* AlbumCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollectionViewLayout.swift; sourceTree = "<group>"; };
 		C021B00D20A5896600A1F7CA /* OpenSourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSourceViewController.swift; sourceTree = "<group>"; };
 		C021B01020A595FD00A1F7CA /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MainInterface.strings"; sourceTree = "<group>"; };
 		C021B01220A5961200A1F7CA /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/MainInterface.strings"; sourceTree = "<group>"; };
@@ -125,6 +124,7 @@
 		C09D7C5B233E710C002219B2 /* Color.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Color.xcassets; sourceTree = "<group>"; };
 		C0B0DFF520A2D5EB000705E9 /* AlbumViewBottomToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumViewBottomToolBar.swift; sourceTree = "<group>"; };
 		C0BC75122068A2F7000522DF /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		C0C5016C255CE26200C0ED38 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
 		C0D8283C2060ED7300009F62 /* ImageGotchaAction.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ImageGotchaAction.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0D828412060ED7300009F62 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		C0D828432060ED7300009F62 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -332,6 +332,7 @@
 			isa = PBXGroup;
 			children = (
 				C0E40E25208C8F700077F3AA /* UIColor+Extension.swift */,
+				C0C5016C255CE26200C0ED38 /* UIApplication+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -342,7 +343,6 @@
 				C0E40E35208C94840077F3AA /* AlbumViewController.swift */,
 				C0014E5E20A1A86B00D68445 /* AlbumCollectionViewCell.swift */,
 				C0014E5F20A1A86B00D68445 /* AlbumCollectionViewCell.xib */,
-				C0082167209D4E8400797058 /* AlbumCollectionViewLayout.swift */,
 				C0B0DFF520A2D5EB000705E9 /* AlbumViewBottomToolBar.swift */,
 			);
 			path = Album;
@@ -512,6 +512,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ImageGotcha/Pods-ImageGotcha-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Blueprints/Blueprints.framework",
 				"${BUILT_PRODUCTS_DIR}/HSPhotoKit/HSPhotoKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 				"${BUILT_PRODUCTS_DIR}/KingfisherWebP/KingfisherWebP.framework",
@@ -521,6 +522,7 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Blueprints.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HSPhotoKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KingfisherWebP.framework",
@@ -607,11 +609,11 @@
 				C0E40E2F208C8F700077F3AA /* HomeViewController.swift in Sources */,
 				C0E40E36208C94840077F3AA /* AlbumViewController.swift in Sources */,
 				C0E40E1B208C8F020077F3AA /* AppDelegate.swift in Sources */,
-				C0082168209D4E8400797058 /* AlbumCollectionViewLayout.swift in Sources */,
 				C0E40E2E208C8F700077F3AA /* UIColor+Extension.swift in Sources */,
 				C0711488236EDE8800ED54BC /* SwipeSelectingGestureRecognizer.swift in Sources */,
 				C063D64A25599BB800B1952E /* SceneDelegate.swift in Sources */,
 				C0014E6020A1A86B00D68445 /* AlbumCollectionViewCell.swift in Sources */,
+				C0C5016D255CE26200C0ED38 /* UIApplication+Extension.swift in Sources */,
 				C0E40E30208C8F700077F3AA /* BaseNavigationViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

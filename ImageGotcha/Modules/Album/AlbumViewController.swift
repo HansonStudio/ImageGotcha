@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 import HSPhotoKit
+import Blueprints
 
 class AlbumViewController: UIViewController {
 
@@ -28,7 +29,16 @@ class AlbumViewController: UIViewController {
     }()
     
     lazy var collectionView: SwipeSelectingCollectionView = {
-        let collectionView = SwipeSelectingCollectionView(frame: .zero, collectionViewLayout: AlbumCollectionViewLayout())
+        var flowlayout = UICollectionViewFlowLayout()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            flowlayout = iPadOSLayout
+        } else if UIDevice.current.userInterfaceIdiom == .phone {
+            flowlayout = iOSLayout
+        }
+        #if targetEnvironment(macCatalyst)
+        flowlayout = iPadOSLayout
+        #endif
+        let collectionView = SwipeSelectingCollectionView(frame: .zero, collectionViewLayout: flowlayout)
         if #available(iOS 13.0, *) {
             collectionView.backgroundColor = UIColor.systemGroupedBackground
         } else {
@@ -52,6 +62,24 @@ class AlbumViewController: UIViewController {
         label.textAlignment = .center
         return label
     }()
+    
+    let iOSLayout = VerticalBlueprintLayout(
+        itemsPerRow: 3,
+        height: 90,
+        minimumInteritemSpacing: 10,
+        minimumLineSpacing: 15,
+        sectionInset: EdgeInsets(top: 10, left: 10, bottom: 10, right: 10),
+        stickyHeaders: false,
+        stickyFooters: false)
+    
+    let iPadOSLayout = VerticalBlueprintLayout(
+        itemsPerRow: 6,
+        height: 90,
+        minimumInteritemSpacing: 10,
+        minimumLineSpacing: 15,
+        sectionInset: EdgeInsets(top: 10, left: 10, bottom: 10, right: 10),
+        stickyHeaders: false,
+        stickyFooters: false)
     
     lazy var toolBarView = AlbumViewBottomToolBar()
     var isSelectState = false
@@ -253,5 +281,28 @@ extension AlbumViewController: UICollectionViewDelegate, UICollectionViewDataSou
             }
             self.present(galleryPreview, animated: true, completion: nil)
         }
+    }
+}
+
+extension AlbumViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        var itemNum: CGFloat = 3
+        var windowWidth = ScreenWidth
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            if UIDevice.current.orientation.isLandscape {
+                itemNum = 6
+            } else {
+                itemNum = 4
+            }
+        }
+        #if targetEnvironment(macCatalyst)
+        itemNum = 6
+        if let windowBounds = UIApplication.shared.activeWindowScene?.coordinateSpace.bounds {
+            windowWidth = windowBounds.width
+        }
+        #endif
+        let itemSpace = 5 * (itemNum - 1)
+        let itemWidth = (windowWidth - itemSpace) / itemNum
+        return CGSize(width: itemWidth, height: itemWidth)
     }
 }

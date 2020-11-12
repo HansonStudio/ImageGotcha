@@ -4,6 +4,7 @@ use_frameworks!
 def shared_pods
     pod 'Reusable'
     pod 'SnapKit'
+    pod 'Blueprints'
     pod 'HSPhotoKit', :path => 'HSPhotoKit/.'
 end
 
