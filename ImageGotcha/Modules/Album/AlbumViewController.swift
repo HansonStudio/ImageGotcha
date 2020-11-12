@@ -39,11 +39,7 @@ class AlbumViewController: UIViewController {
         flowlayout = iPadOSLayout
         #endif
         let collectionView = SwipeSelectingCollectionView(frame: .zero, collectionViewLayout: flowlayout)
-        if #available(iOS 13.0, *) {
-            collectionView.backgroundColor = UIColor.systemGroupedBackground
-        } else {
-            collectionView.backgroundColor = UIColor.white
-        }
+        collectionView.backgroundColor = UIColor.systemGroupedBackground
         collectionView.register(UINib(nibName: "AlbumCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: cellId)
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -52,11 +48,7 @@ class AlbumViewController: UIViewController {
     
     lazy var noPhotoLabel: UILabel = {
         let label = UILabel()
-        if #available(iOS 13.0, *) {
-            label.textColor = UIColor.label
-        } else {
-            label.textColor = UIColor.white
-        }
+        label.textColor = UIColor.label
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.text = LocalizedStr.noPhoto
         label.textAlignment = .center
