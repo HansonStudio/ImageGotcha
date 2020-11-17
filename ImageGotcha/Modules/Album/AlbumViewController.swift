@@ -34,11 +34,11 @@ class AlbumViewController: UIViewController {
             flowlayout = iPadOSLayout
         } else if UIDevice.current.userInterfaceIdiom == .phone {
             flowlayout = iOSLayout
+        } else {
+            flowlayout = iPadOSLayout
         }
-        #if targetEnvironment(macCatalyst)
-        flowlayout = iPadOSLayout
-        #endif
         let collectionView = SwipeSelectingCollectionView(frame: .zero, collectionViewLayout: flowlayout)
+        collectionView.allowsMultipleSelection = true
         collectionView.backgroundColor = UIColor.systemGroupedBackground
         collectionView.register(UINib(nibName: "AlbumCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: cellId)
         collectionView.dataSource = self
