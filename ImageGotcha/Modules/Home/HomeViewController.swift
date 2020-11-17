@@ -25,7 +25,7 @@ enum homeSection {
 
 class HomeViewController: UIViewController {
     
-    private let dataSet: [homeSection] = [.tutorial, .openSafari, .album, .about]
+    private let dataSet: [homeSection] = [.tutorial, .album, .about]
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -103,6 +103,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         case .openSafari:
             ImageCache.default.clearDiskCache()
             ImageCache.default.cleanExpiredDiskCache()
+            // 如果配置了默认浏览器，就不是打开 Safari 了。
             open(scheme: "http://www.bing.com")
         case .album:
             self.navigationController?.pushViewController(AlbumViewController(), animated: true)
