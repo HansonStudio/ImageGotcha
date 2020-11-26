@@ -8,8 +8,9 @@
 
 import UIKit
 import HSPhotoKit
+import Reusable
 
-class AlbumCollectionViewCell: UICollectionViewCell {
+class AlbumCollectionViewCell: UICollectionViewCell, NibReusable {
 
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var overlayView: UIView!
@@ -21,19 +22,28 @@ class AlbumCollectionViewCell: UICollectionViewCell {
 
     override var isSelected: Bool {
         didSet {
-            overlayView.isHidden = !isSelected
-            selectedView.isHidden = !isSelected
-            let scale: CGFloat = isSelected ? 0.95 : 1.0
-            UIView.animate(withDuration: 0.1) {
-                self.transform = CGAffineTransform(scaleX: scale, y: scale)
-            }
+            showSelectionOverlay()
         }
     }
-}
-
-extension AlbumCollectionViewCell {
-    func configureCell(_ model: CellModel) {
+    
+//    override func prepareForReuse() {
+//        super.prepareForReuse()
+//        isSelected = false
+//        showSelectionOverlay()
+//    }
+    
+    func configureCell(with model: CellModel) {
         imageView.image = model.photo.image
+        showSelectionOverlay()
+    }
+    
+    func showSelectionOverlay() {
+        overlayView.isHidden = !isSelected
+        selectedView.isHidden = !isSelected
+        let scale: CGFloat = isSelected ? 0.95 : 1.0
+        UIView.animate(withDuration: 0.1) {
+            self.transform = CGAffineTransform(scaleX: scale, y: scale)
+        }
     }
 }
 

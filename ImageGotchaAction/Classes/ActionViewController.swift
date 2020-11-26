@@ -16,7 +16,7 @@ import Reusable
 
 class ActionViewController: UIViewController {
     
-    @IBOutlet weak var collectionView: SwipeSelectingCollectionView!
+    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var selectBarButton: UIBarButtonItem!
     @IBOutlet weak var bottomToolBar: UIView!
     @IBOutlet weak var selectAllButton: UIButton!
@@ -27,9 +27,6 @@ class ActionViewController: UIViewController {
     var photosToSave: [Photo] = []
     var videosToSave: [URL?] = []
 
-    var isSelectState = false
-    
-    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -57,6 +54,12 @@ class ActionViewController: UIViewController {
     private func setupView() {
         collectionView.register(cellType: ImageCollectionViewCell.self)
         collectionView.register(cellType: VideoCollectionViewCell.self)
+        collectionView.allowsMultipleSelection = false
+        if #available(iOS 14.0, *) {
+            // ⚠️ iOS 14 需配置这个属性后，其实不需要再调用 shouldBeginMultipleSelectionInteractionAt delegate 方法
+            collectionView.allowsSelectionDuringEditing = true
+            collectionView.allowsMultipleSelectionDuringEditing = true
+        }
         selectAllButton.setTitle(LocalizedStr.cancelSelectAll, for: .selected)
         selectAllButton.setTitle(LocalizedStr.selectAll, for: .normal)
     }
@@ -68,7 +71,7 @@ class ActionViewController: UIViewController {
     }
     
     @IBAction func toMulitiSelectImage(_ sender: Any) {
-        setUpMultiSelectState()
+        setEditing(!isEditing, animated: true)
     }
     
     @IBAction func toSave(_ sender: Any) {
@@ -85,7 +88,8 @@ class ActionViewController: UIViewController {
         }
         if photosToSave.count > 0 || videosToSave.count > 0 {
             showSaveAction(photos: photosToSave) { [weak self] in
-                self?.setUpMultiSelectState()
+                guard let self = self else { return }
+                self.setEditing(!self.isEditing, animated: true)
             }
         }
     }
@@ -165,112 +169,38 @@ extension ActionViewController {
 
         collectionView.reloadData()
     }
-        
-    private func setUpMultiSelectState() {
-        collectionView.isSwipeSelectingEnable = !isSelectState
-        isSelectState = !isSelectState
-        selectBarButton.title = isSelectState ? LocalizedStr.cancel : LocalizedStr.select
-        
+    
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        guard isEditing != editing else { return }
+        super.setEditing(editing, animated: animated)
+        // 注意开启关闭多选(目前测试发现 iOS14 上 CollectionView 单个手指也能触发多选)
+        collectionView.allowsMultipleSelection = editing
+        if #available(iOS 14.0, *) {
+            collectionView.allowsMultipleSelectionDuringEditing = editing
+        }
+        clearSelectedItems(animated: true)
+        updateRightBarButtonTitle()
+        updateBottomToolBar()
+    }
+    
+    func clearSelectedItems(animated: Bool) {
+        collectionView.indexPathsForSelectedItems?.forEach({ (indexPath) in
+            collectionView.deselectItem(at: indexPath, animated: animated)
+        })
+        collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
+    }
+    
+    func updateRightBarButtonTitle() {
+        guard let button = navigationItem.rightBarButtonItem else { return }
+        button.title = isEditing ? LocalizedStr.cancel : LocalizedStr.select
+    }
+    
+    func updateBottomToolBar() {
         bottomToolBar.isHidden = false
-        let bottomConstant: CGFloat = isSelectState ? -44 : 44
+        let bottomConstant: CGFloat = isEditing ? -44 : 44
         UIView.animate(withDuration: 0.3) {
             self.bottomToolBar.transform = CGAffineTransform(translationX: 0, y: bottomConstant)
         }
-        
-        if !isSelectState {
-            for i in 0 ..< cellModels.count {
-                cellModels[i].isSelected = false
-                selectAllButton.isSelected = false
-            }
-            self.collectionView.reloadData()
-        }
-    }
-}
-
-
-// MARK: - UICollectionViewDataSource
-
-extension ActionViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return cellModels.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cellModel = cellModels[indexPath.row]
-        switch cellModel.cellModelType {
-        case .image:
-            let cell: ImageCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.configureCell(cellModel)
-            return cell
-        case .video:
-            let cell: VideoCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.configureCell(cellModel)
-            return cell
-        }
-    }
-}
-
-
-// MARK: - UICollectionViewDelegate
-
-extension ActionViewController: UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cellModel = cellModels[indexPath.row]
-        switch cellModel.cellModelType {
-        case .image:
-            let currentItem = collectionView.cellForItem(at: indexPath) as! ImageCollectionViewCell
-            let currentPhoto = cellModel.photo
-            if isSelectState {
-                cellModels[indexPath.row].isSelected.toggle()
-                currentItem.configureCell(cellModels[indexPath.row])
-            } else {
-                collectionView.deselectItem(at: indexPath, animated: false)
-                currentPhoto?.image = currentItem.previewImageView.image
-                let galleryPreview = PhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: currentItem)
-                galleryPreview.referenceViewForPhotoWhenDismissingHandler = { [weak self] photo in
-                    guard let index = self?.cellModels.firstIndex(where: { $0.photo === photo }) else { return nil }
-                    let selectedIndexPath = IndexPath(item: index, section: indexPath.section)
-                    let cell = collectionView.cellForItem(at: selectedIndexPath) as? ImageCollectionViewCell
-                    return cell?.previewImageView
-                }
-                galleryPreview.longPressGestureHandler = { [weak self] (photo, gesture) in
-                    guard let self = self else { return }
-                    self.saveSinglePhoto(photo as! Photo)
-                }
-                galleryPreview.actionButtonTappedHandler = { [weak self] (photo) in
-                    guard let self = self else { return }
-                    self.saveSinglePhoto(photo as! Photo)
-                }
-                self.present(galleryPreview, animated: true, completion: nil)
-            }
-        case .video:
-            let currentItem = collectionView.cellForItem(at: indexPath) as! VideoCollectionViewCell
-            if isSelectState {
-                cellModels[indexPath.row].isSelected = !cellModels[indexPath.row].isSelected
-                currentItem.configureCell(cellModels[indexPath.row])
-            } else {
-                collectionView.deselectItem(at: indexPath, animated: false)
-                guard cellModel.videoUrl != nil else { return }
-                let player = AVPlayer(url: cellModel.videoUrl!)
-                let playerViewController = AVPlayerViewController()
-                playerViewController.player = player
-                self.present(playerViewController, animated: true) {
-                    playerViewController.player!.play()
-                }
-            }
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        guard isSelectState else { return }
-        cellModels[indexPath.row].isSelected = !cellModels[indexPath.row].isSelected
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let cell = cell as? ImageCollectionViewCell
-        // 取消已经隐藏的 Cell 的下载任务
-        cell?.previewImageView.kf.cancelDownloadTask()
     }
     
     func saveSinglePhoto(_ photo: Photo) {
@@ -278,6 +208,7 @@ extension ActionViewController: UICollectionViewDelegate {
         photosToSave.append(photo)
         showSaveAction(photos: photosToSave)
     }
+
 }
 
 // MARK: - 视频下载（暂不用）

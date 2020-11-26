@@ -27,8 +27,6 @@
 		C06D90752098768C00F9F9C6 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06D90742098768C00F9F9C6 /* Constant.swift */; };
 		C06D908220987B5000F9F9C6 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06D908020987B5000F9F9C6 /* AboutViewController.swift */; };
 		C06D908320987B5000F9F9C6 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C06D908120987B5000F9F9C6 /* AboutViewController.xib */; };
-		C0711487236EDE8800ED54BC /* SwipeSelectingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0711485236EDE8800ED54BC /* SwipeSelectingCollectionView.swift */; };
-		C0711488236EDE8800ED54BC /* SwipeSelectingGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0711486236EDE8800ED54BC /* SwipeSelectingGestureRecognizer.swift */; };
 		C0711489236EE8D800ED54BC /* SwipeSelectingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0711485236EDE8800ED54BC /* SwipeSelectingCollectionView.swift */; };
 		C071148A236EE8DA00ED54BC /* SwipeSelectingGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0711486236EDE8800ED54BC /* SwipeSelectingGestureRecognizer.swift */; };
 		C098E709252090AE00C19C02 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C098E708252090AE00C19C02 /* UIViewController+Extension.swift */; };
@@ -49,6 +47,8 @@
 		C0E40E30208C8F700077F3AA /* BaseNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E40E2A208C8F700077F3AA /* BaseNavigationViewController.swift */; };
 		C0E40E31208C8F700077F3AA /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E40E2B208C8F700077F3AA /* TableViewCell.swift */; };
 		C0E40E36208C94840077F3AA /* AlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E40E35208C94840077F3AA /* AlbumViewController.swift */; };
+		C0EEE3E4256F84CE00A21E01 /* AlbumViewController+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EEE3E3256F84CE00A21E01 /* AlbumViewController+CollectionView.swift */; };
+		C0EEE3FF256FA1B300A21E01 /* ActionViewController+CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EEE3FE256FA1B300A21E01 /* ActionViewController+CollectionView.swift */; };
 		C0F3948F23E291B200CE6DD2 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F3948E23E291B200CE6DD2 /* AppState.swift */; };
 		C0F8F17220808B23002920AC /* BasicCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F8F17120808B23002920AC /* BasicCollectionViewFlowLayout.swift */; };
 /* End PBXBuildFile section */
@@ -140,6 +140,8 @@
 		C0E40E2B208C8F700077F3AA /* TableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		C0E40E35208C94840077F3AA /* AlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumViewController.swift; sourceTree = "<group>"; };
 		C0E40E37208C9D3B0077F3AA /* ImageGotchaAction.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ImageGotchaAction.entitlements; sourceTree = "<group>"; };
+		C0EEE3E3256F84CE00A21E01 /* AlbumViewController+CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlbumViewController+CollectionView.swift"; sourceTree = "<group>"; };
+		C0EEE3FE256FA1B300A21E01 /* ActionViewController+CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ActionViewController+CollectionView.swift"; sourceTree = "<group>"; };
 		C0F3948E23E291B200CE6DD2 /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		C0F8F17120808B23002920AC /* BasicCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		C138288A9EB64AB75C3FE3A2 /* Pods_ImageGotcha.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImageGotcha.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -289,6 +291,7 @@
 			isa = PBXGroup;
 			children = (
 				C0D8284B2060EDCE00009F62 /* ActionViewController.swift */,
+				C0EEE3FE256FA1B300A21E01 /* ActionViewController+CollectionView.swift */,
 				C0D8287F2060EE5100009F62 /* ImageCollectionViewCell.swift */,
 				C03A6AF5210F0930000132F5 /* VideoCollectionViewCell.swift */,
 				C0F8F17120808B23002920AC /* BasicCollectionViewFlowLayout.swift */,
@@ -341,6 +344,7 @@
 			isa = PBXGroup;
 			children = (
 				C0E40E35208C94840077F3AA /* AlbumViewController.swift */,
+				C0EEE3E3256F84CE00A21E01 /* AlbumViewController+CollectionView.swift */,
 				C0014E5E20A1A86B00D68445 /* AlbumCollectionViewCell.swift */,
 				C0014E5F20A1A86B00D68445 /* AlbumCollectionViewCell.xib */,
 				C0B0DFF520A2D5EB000705E9 /* AlbumViewBottomToolBar.swift */,
@@ -601,16 +605,15 @@
 				C0B0DFF620A2D5EB000705E9 /* AlbumViewBottomToolBar.swift in Sources */,
 				C0F3948F23E291B200CE6DD2 /* AppState.swift in Sources */,
 				C0E40E31208C8F700077F3AA /* TableViewCell.swift in Sources */,
+				C0EEE3E4256F84CE00A21E01 /* AlbumViewController+CollectionView.swift in Sources */,
 				C021B00E20A5896600A1F7CA /* OpenSourceViewController.swift in Sources */,
 				C06D90752098768C00F9F9C6 /* Constant.swift in Sources */,
-				C0711487236EDE8800ED54BC /* SwipeSelectingCollectionView.swift in Sources */,
 				C021B01E20A69C6F00A1F7CA /* StringAsset.swift in Sources */,
 				C06D908220987B5000F9F9C6 /* AboutViewController.swift in Sources */,
 				C0E40E2F208C8F700077F3AA /* HomeViewController.swift in Sources */,
 				C0E40E36208C94840077F3AA /* AlbumViewController.swift in Sources */,
 				C0E40E1B208C8F020077F3AA /* AppDelegate.swift in Sources */,
 				C0E40E2E208C8F700077F3AA /* UIColor+Extension.swift in Sources */,
-				C0711488236EDE8800ED54BC /* SwipeSelectingGestureRecognizer.swift in Sources */,
 				C063D64A25599BB800B1952E /* SceneDelegate.swift in Sources */,
 				C0014E6020A1A86B00D68445 /* AlbumCollectionViewCell.swift in Sources */,
 				C0C5016D255CE26200C0ED38 /* UIApplication+Extension.swift in Sources */,
@@ -625,6 +628,7 @@
 				C03A6AF6210F0930000132F5 /* VideoCollectionViewCell.swift in Sources */,
 				C098E709252090AE00C19C02 /* UIViewController+Extension.swift in Sources */,
 				C021B02220A6A33300A1F7CA /* StringAsset.swift in Sources */,
+				C0EEE3FF256FA1B300A21E01 /* ActionViewController+CollectionView.swift in Sources */,
 				C0D828802060EE5100009F62 /* ImageCollectionViewCell.swift in Sources */,
 				C0711489236EE8D800ED54BC /* SwipeSelectingCollectionView.swift in Sources */,
 				C09D7C5A233E6D84002219B2 /* String+MD5.swift in Sources */,
@@ -813,7 +817,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/ImageGotcha/SupportFiles/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.7.0;
+				MARKETING_VERSION = 1.7.1;
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HansonStudio.ImageGotcha;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -838,7 +842,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/ImageGotcha/SupportFiles/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.7.0;
+				MARKETING_VERSION = 1.7.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.HansonStudio.ImageGotcha;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -862,7 +866,7 @@
 				INFOPLIST_FILE = ImageGotchaAction/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MARKETING_VERSION = 1.7.0;
+				MARKETING_VERSION = 1.7.1;
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.HansonStudio.ImageGotcha.ImageGotchaAction;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -886,7 +890,7 @@
 				INFOPLIST_FILE = ImageGotchaAction/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MARKETING_VERSION = 1.7.0;
+				MARKETING_VERSION = 1.7.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.HansonStudio.ImageGotcha.ImageGotchaAction;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

@@ -10,10 +10,11 @@ import UIKit
 import SnapKit
 import HSPhotoKit
 import Blueprints
+import Reusable
 
 class AlbumViewController: UIViewController {
-
-    fileprivate let cellId = "AlbumCollectionViewCell"
+    var collectionView: UICollectionView!
+    
     var saveImageShareDirectory: URL?
     var photos: [Photo] = []
     var photoToDelete: [Photo] = []
@@ -22,29 +23,6 @@ class AlbumViewController: UIViewController {
             noPhotoLabel.isHidden = (cellModels.count > 0) ? true : false
         }
     }
-    
-    lazy var selectImageButton: UIBarButtonItem = {
-        let awareBarButtonItem = UIBarButtonItem(title: LocalizedStr.select, style: UIBarButtonItem.Style.plain, target: self, action: #selector(toggleSelectState))
-        return awareBarButtonItem
-    }()
-    
-    lazy var collectionView: SwipeSelectingCollectionView = {
-        var flowlayout = UICollectionViewFlowLayout()
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            flowlayout = iPadOSLayout
-        } else if UIDevice.current.userInterfaceIdiom == .phone {
-            flowlayout = iOSLayout
-        } else {
-            flowlayout = iPadOSLayout
-        }
-        let collectionView = SwipeSelectingCollectionView(frame: .zero, collectionViewLayout: flowlayout)
-        collectionView.allowsMultipleSelection = true
-        collectionView.backgroundColor = UIColor.systemGroupedBackground
-        collectionView.register(UINib(nibName: "AlbumCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: cellId)
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        return collectionView
-    }()
     
     lazy var noPhotoLabel: UILabel = {
         let label = UILabel()
@@ -74,20 +52,14 @@ class AlbumViewController: UIViewController {
         stickyFooters: false)
     
     lazy var toolBarView = AlbumViewBottomToolBar()
-    var isSelectState = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setUpView()
         getShareDirectory()
         getImageData()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        self.navigationItem.rightBarButtonItem = selectImageButton
-    }
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -97,24 +69,13 @@ class AlbumViewController: UIViewController {
 extension AlbumViewController {
     
     private func setUpView() {
-        self.title = LocalizedStr.album
+        title = LocalizedStr.album
+        let selectImageButton = UIBarButtonItem(title: LocalizedStr.select, style: UIBarButtonItem.Style.plain, target: self, action: #selector(toggleSelectionMode))
+        navigationItem.rightBarButtonItem = selectImageButton
         
-        toolBarView.isHidden = true
-        toolBarView.selectAllButton.addTarget(self, action: #selector(selectAllImage), for: .touchUpInside)
-        toolBarView.deleteButton.addTarget(self, action: #selector(deleteImage), for: .touchUpInside)
-        
-        self.view.addSubview(collectionView)
-        self.view.addSubview(toolBarView)
-        collectionView.backgroundView = noPhotoLabel
-        
-        collectionView.snp.makeConstraints { (make) in
-            make.top.left.right.bottom.equalToSuperview()
-        }
-        toolBarView.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview()
-            make.height.equalTo(44)
-            make.top.equalTo(view.snp.bottomMargin)
-        }
+        setupCollectionView()
+        setupBottomToolView()
+        setEditing(false, animated: false)
     }
     
     private func getShareDirectory() {
@@ -156,27 +117,7 @@ extension AlbumViewController {
             
         }
     }
-    
-    @objc private func toggleSelectState() {
-        isSelectState = !isSelectState
-        collectionView.isSwipeSelectingEnable = isSelectState
-        selectImageButton.title = isSelectState ? LocalizedStr.cancel : LocalizedStr.select
-        
-        toolBarView.isHidden = false
-        let bottomConstant: CGFloat = isSelectState ? -44 : 44
-        UIView.animate(withDuration: 0.3) {
-            self.toolBarView.transform = CGAffineTransform(translationX: 0, y: bottomConstant)
-        }
-        
-        if !isSelectState {
-            for i in 0 ..< cellModels.count {
-                cellModels[i].isSelected = false
-                toolBarView.selectAllButton.isSelected = false
-            }
-            collectionView.reloadData()
-        }
-    }
-    
+
     @objc private func selectAllImage(sender: UIButton) {
         sender.isSelected = !sender.isSelected
         for i in 0 ..< cellModels.count {
@@ -208,10 +149,10 @@ extension AlbumViewController {
             }
         }
         getImageData()
-        toggleSelectState()
+        toggleSelectionMode()
     }
     
-    private func showShareImage(photo: PhotoViewable) {
+    func showShareImage(photo: PhotoViewable) {
         guard let image = photo.image else { return }
         let imageToShare = [image]
         let activityViewController = UIActivityViewController(activityItems: imageToShare, applicationActivities: nil)
@@ -226,54 +167,116 @@ extension AlbumViewController {
             UIApplication.presentedViewController(rootController: self)?.present(activityViewController, animated: true, completion: nil)
         }
     }
+    
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        guard isEditing != editing else { return }
+        super.setEditing(editing, animated: animated)
+        // 注意开启关闭多选(目前测试发现 iOS14 上 CollectionView 单个手指也能触发多选)
+        collectionView.allowsMultipleSelection = editing
+        if #available(iOS 14.0, *) {
+            collectionView.allowsMultipleSelectionDuringEditing = editing
+        }
+        clearSelectedItems(animated: true)
+        updateRightBarButtonTitle()
+        updateBottomToolBar()
+    }
+
+    @IBAction func toggleSelectionMode() {
+        setEditing(!isEditing, animated: true)
+    }
+    
+    func clearSelectedItems(animated: Bool) {
+        collectionView.indexPathsForSelectedItems?.forEach({ (indexPath) in
+            collectionView.deselectItem(at: indexPath, animated: animated)
+        })
+        collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
+    }
+    
+    func updateRightBarButtonTitle() {
+        guard let button = navigationItem.rightBarButtonItem else { return }
+        button.title = isEditing ? LocalizedStr.cancel : LocalizedStr.select
+    }
+    
+    func updateBottomToolBar() {
+        toolBarView.isHidden = false
+        let bottomConstant: CGFloat = isEditing ? -44 : 44
+        UIView.animate(withDuration: 0.3) {
+            self.toolBarView.transform = CGAffineTransform(translationX: 0, y: bottomConstant)
+        }
+    }
+    
+    func setupCollectionView() {
+        var flowlayout = UICollectionViewFlowLayout()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            flowlayout = iPadOSLayout
+        } else if UIDevice.current.userInterfaceIdiom == .phone {
+            flowlayout = iOSLayout
+        } else {
+            flowlayout = iPadOSLayout
+        }
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowlayout)
+        collectionView.register(cellType: AlbumCollectionViewCell.self)
+        collectionView.backgroundView = noPhotoLabel
+        collectionView.allowsMultipleSelection = false
+        if #available(iOS 14.0, *) {
+            // ⚠️ iOS 14 需配置这个属性后，其实不需要再调用 shouldBeginMultipleSelectionInteractionAt delegate 方法
+            collectionView.allowsSelectionDuringEditing = true
+            collectionView.allowsMultipleSelectionDuringEditing = true
+        }
+        collectionView.backgroundColor = UIColor.systemGroupedBackground
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        view.addSubview(collectionView)
+        collectionView.snp.makeConstraints { (make) in
+            make.top.left.right.bottom.equalToSuperview()
+        }
+    }
+    
+    func setupBottomToolView() {
+        toolBarView.isHidden = true
+        toolBarView.selectAllButton.addTarget(self, action: #selector(selectAllImage), for: .touchUpInside)
+        toolBarView.deleteButton.addTarget(self, action: #selector(deleteImage), for: .touchUpInside)
+        view.addSubview(toolBarView)
+        toolBarView.snp.makeConstraints { (make) in
+            make.left.right.equalToSuperview()
+            make.height.equalTo(44)
+            make.top.equalTo(view.snp.bottomMargin)
+        }
+    }
 }
 
-extension AlbumViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension AlbumViewController {
+//    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+//        guard isSelectState else { return }
+//        cellModels[indexPath.row].isSelected = !cellModels[indexPath.row].isSelected
+//    }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return cellModels.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? AlbumCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        cell.configureCell(cellModels[indexPath.row])
-        
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        guard isSelectState else { return }
-        cellModels[indexPath.row].isSelected = !cellModels[indexPath.row].isSelected
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let currentPhoto = photos[indexPath.row]
-        let currentItem = collectionView.cellForItem(at: indexPath) as! AlbumCollectionViewCell
-        
-        if isSelectState {
-            cellModels[indexPath.row].isSelected = !cellModels[indexPath.row].isSelected
-            // CollectionView 会调用 Cell 的 isSelected 属性；故无须设置 currentItem.configureCell(cellModels[indexPath.row])
-        } else {
-            collectionView.deselectItem(at: indexPath, animated: false)
-            let galleryPreview = PhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: currentItem, actionButtonStyle: .share, isHideURLTextView: true)
-            galleryPreview.referenceViewForPhotoWhenDismissingHandler = { [weak self] photo in
-                if let index = self?.photos.firstIndex(where: {$0 === photo}) {
-                    let currentSelectedIndexPath = IndexPath(item: index, section: indexPath.section)
-                    if let cell = collectionView.cellForItem(at: currentSelectedIndexPath) as? AlbumCollectionViewCell {
-                        return cell.imageView
-                    }
-                    return nil
-                }
-                return nil
-            }
-            galleryPreview.actionButtonTappedHandler = { [weak self] (photo) in
-                self?.showShareImage(photo: photo)
-            }
-            self.present(galleryPreview, animated: true, completion: nil)
-        }
-    }
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        let currentPhoto = photos[indexPath.row]
+//        let currentItem = collectionView.cellForItem(at: indexPath) as! AlbumCollectionViewCell
+//
+//        if isSelectState {
+//            cellModels[indexPath.row].isSelected = !cellModels[indexPath.row].isSelected
+//            // CollectionView 会调用 Cell 的 isSelected 属性；故无须设置 currentItem.configureCell(cellModels[indexPath.row])
+//        } else {
+//            collectionView.deselectItem(at: indexPath, animated: false)
+//            let galleryPreview = PhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: currentItem, actionButtonStyle: .share, isHideURLTextView: true)
+//            galleryPreview.referenceViewForPhotoWhenDismissingHandler = { [weak self] photo in
+//                if let index = self?.photos.firstIndex(where: {$0 === photo}) {
+//                    let currentSelectedIndexPath = IndexPath(item: index, section: indexPath.section)
+//                    if let cell = collectionView.cellForItem(at: currentSelectedIndexPath) as? AlbumCollectionViewCell {
+//                        return cell.imageView
+//                    }
+//                    return nil
+//                }
+//                return nil
+//            }
+//            galleryPreview.actionButtonTappedHandler = { [weak self] (photo) in
+//                self?.showShareImage(photo: photo)
+//            }
+//            self.present(galleryPreview, animated: true, completion: nil)
+//        }
+//    }
 }
 
 extension AlbumViewController: UICollectionViewDelegateFlowLayout {
