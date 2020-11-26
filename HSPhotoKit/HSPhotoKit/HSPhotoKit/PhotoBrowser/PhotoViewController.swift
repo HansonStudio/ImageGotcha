@@ -10,12 +10,8 @@ import Kingfisher
 
 class PhotoViewController: UIViewController, UIScrollViewDelegate {
     var photo: PhotoViewable
-    
     var longPressGestureHandler: ((UILongPressGestureRecognizer) -> ())?
-    
-    lazy private(set) var scalingImageView: ScalingImageView = {
-        return ScalingImageView()
-    }()
+    private(set) var scalingImageView: ScalingImageView!
     
     lazy private(set) var doubleTapGestureRecognizer: UITapGestureRecognizer = {
         let gesture = UITapGestureRecognizer(target: self, action: #selector(PhotoViewController.handleDoubleTapWithGestureRecognizer(_:)))
@@ -51,8 +47,8 @@ class PhotoViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        scalingImageView = ScalingImageView(frame: view.bounds)
         scalingImageView.delegate = self
-        scalingImageView.frame = view.bounds
         scalingImageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(scalingImageView)
         

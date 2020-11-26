@@ -72,13 +72,13 @@ extension ScalingImageView {
     func setImage(_ image: UIImage?, animated: Bool = false) {
         if let size = image?.size {
             var realSize = size
-            let imageWidth = UIScreen.universalBounds.width
+            let imageWidth = bounds.width//UIScreen.universalBounds.width
             realSize.width = imageWidth
             realSize.height = ceil(imageWidth * size.height / size.width)
             
             contentSize = CGSize(width: imageWidth, height: realSize.height)
             
-            let frame = CGRect(x: (UIScreen.universalBounds.width - realSize.width) / 2.0,
+            let frame = CGRect(x: (imageWidth - realSize.width) / 2.0,
                                y: realSize.height > bounds.height ? 0 : (bounds.height - realSize.height) / 2.0,
                                width: realSize.width, height: realSize.height)
             if frame.equalTo(imageView.frame) {
