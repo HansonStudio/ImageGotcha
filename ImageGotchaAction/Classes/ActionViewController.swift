@@ -181,6 +181,9 @@ extension ActionViewController {
         clearSelectedItems(animated: true)
         updateRightBarButtonTitle()
         updateBottomToolBar()
+        if !editing {
+            selectAllButton.isSelected = false
+        }
     }
     
     func clearSelectedItems(animated: Bool) {
