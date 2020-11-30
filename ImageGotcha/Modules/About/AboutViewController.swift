@@ -121,13 +121,13 @@ extension AboutViewController: MFMailComposeViewControllerDelegate {
         
         switch result{
         case .sent:
-            print("邮件已发送")
+            dPrint("邮件已发送")
         case .cancelled:
-            print("邮件已取消")
+            dPrint("邮件已取消")
         case .saved:
-            print("邮件已保存")
+            dPrint("邮件已保存")
         case .failed:
-            print("邮件发送失败")
+            dPrint("邮件发送失败")
         @unknown default:
             break
         }

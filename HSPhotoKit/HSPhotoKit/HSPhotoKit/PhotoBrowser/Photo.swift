@@ -55,7 +55,7 @@ public class Photo: PhotoViewable {
                     completion(resultValue.image)
                 case .failure(let error):
                     completion(nil)
-                    print("---GetCachedImage Error: \(error.localizedDescription)")
+                    dPrint("---GetCachedImage Error: \(error.localizedDescription)")
                 }
             }
         } else if let url = imageURL {
@@ -65,7 +65,7 @@ public class Photo: PhotoViewable {
                     completion(resultValue.image)
                 case .failure(let error):
                     completion(nil)
-                    print("---GetCachedImage Error: \(error.localizedDescription)")
+                    dPrint("---GetCachedImage Error: \(error.localizedDescription)")
                 }
             }
         }

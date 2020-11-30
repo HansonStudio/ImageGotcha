@@ -48,10 +48,10 @@ class HomeViewController: UIViewController {
         }
         
         let dictory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        print("documentDirectory: " + "\(dictory)")
+        dPrint("documentDirectory: " + "\(dictory)")
         
         let shareDictory = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.hanson.imagegotcha")
-        print("group dictory: " + "\(String(describing: shareDictory))")
+        dPrint("group dictory: " + "\(String(describing: shareDictory))")
         
     }
     

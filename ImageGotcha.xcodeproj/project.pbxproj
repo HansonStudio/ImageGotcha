@@ -27,6 +27,8 @@
 		C06D90752098768C00F9F9C6 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06D90742098768C00F9F9C6 /* Constant.swift */; };
 		C06D908220987B5000F9F9C6 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06D908020987B5000F9F9C6 /* AboutViewController.swift */; };
 		C06D908320987B5000F9F9C6 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C06D908120987B5000F9F9C6 /* AboutViewController.xib */; };
+		C0758B0A2574F68900471942 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0758B092574F68900471942 /* Common.swift */; };
+		C0758B0C2574F6D500471942 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0758B092574F68900471942 /* Common.swift */; };
 		C098E709252090AE00C19C02 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C098E708252090AE00C19C02 /* UIViewController+Extension.swift */; };
 		C09D7C5A233E6D84002219B2 /* String+MD5.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09D7C59233E6D84002219B2 /* String+MD5.swift */; };
 		C09D7C5C233E710C002219B2 /* Color.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C09D7C5B233E710C002219B2 /* Color.xcassets */; };
@@ -113,6 +115,7 @@
 		C06D90742098768C00F9F9C6 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		C06D908020987B5000F9F9C6 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		C06D908120987B5000F9F9C6 /* AboutViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AboutViewController.xib; sourceTree = "<group>"; };
+		C0758B092574F68900471942 /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		C07925D420FE517800AD8B31 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		C08D8C09204F92CE009A1F0D /* ImageGotcha.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageGotcha.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C098E708252090AE00C19C02 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
@@ -195,6 +198,7 @@
 				C06D90742098768C00F9F9C6 /* Constant.swift */,
 				C021B01D20A69C6F00A1F7CA /* ImageAsset.swift */,
 				C021B01C20A69C6F00A1F7CA /* StringAsset.swift */,
+				C0758B092574F68900471942 /* Common.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -593,6 +597,7 @@
 				C0E40E1B208C8F020077F3AA /* AppDelegate.swift in Sources */,
 				C0E40E2E208C8F700077F3AA /* UIColor+Extension.swift in Sources */,
 				C063D64A25599BB800B1952E /* SceneDelegate.swift in Sources */,
+				C0758B0C2574F6D500471942 /* Common.swift in Sources */,
 				C0014E6020A1A86B00D68445 /* AlbumCollectionViewCell.swift in Sources */,
 				C0C5016D255CE26200C0ED38 /* UIApplication+Extension.swift in Sources */,
 				C0E40E30208C8F700077F3AA /* BaseNavigationViewController.swift in Sources */,
@@ -607,6 +612,7 @@
 				C098E709252090AE00C19C02 /* UIViewController+Extension.swift in Sources */,
 				C021B02220A6A33300A1F7CA /* StringAsset.swift in Sources */,
 				C0EEE3FF256FA1B300A21E01 /* ActionViewController+CollectionView.swift in Sources */,
+				C0758B0A2574F68900471942 /* Common.swift in Sources */,
 				C0D828802060EE5100009F62 /* ImageCollectionViewCell.swift in Sources */,
 				C09D7C5A233E6D84002219B2 /* String+MD5.swift in Sources */,
 				C0014E5D20A02CB900D68445 /* PhotoSaver.swift in Sources */,

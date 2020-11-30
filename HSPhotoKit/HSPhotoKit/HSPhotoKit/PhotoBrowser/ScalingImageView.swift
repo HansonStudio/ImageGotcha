@@ -44,7 +44,7 @@ class ScalingImageView: UIScrollView {
                 completion?(true)
             case .failure(let error):
                 completion?(false)
-                print("---ScalingImageView 加载失败: \(error.localizedDescription)")
+                dPrint("---ScalingImageView 加载失败: \(error.localizedDescription)")
             }
         }
     }

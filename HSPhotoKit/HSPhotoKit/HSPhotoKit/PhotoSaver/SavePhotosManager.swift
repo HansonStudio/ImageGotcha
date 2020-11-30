@@ -68,7 +68,7 @@ public class SavePhotosManager {
                     assetAlbum = assetCollection
                 case .failure(let error):
                     // 相册创建失败，则保存到系统相册
-                    print("--- Create Album Fail: \(error.localizedDescription)---")
+                    dPrint("--- Create Album Fail: \(error.localizedDescription)---")
                 }
                 
                 //保存图片
@@ -85,7 +85,7 @@ public class SavePhotosManager {
                     if isSuccess {
                         completion(.success)
                     } else {
-                        print("--- PHAssetChangeRequest Error: \(error!.localizedDescription)")
+                        dPrint("--- PHAssetChangeRequest Error: \(error!.localizedDescription)")
                         completion(.error)
                     }
                 }

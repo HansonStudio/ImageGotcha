@@ -28,7 +28,7 @@ class PhotoSaver {
         }
         saveImageShareDirectory = imageFolder
         
-        print("group dictory: " + "\(String(describing: saveImageShareDirectory?.absoluteString))")
+        dPrint("group dictory: " + "\(String(describing: saveImageShareDirectory?.absoluteString))")
     }
     
     func savePhotoToShareDirectory(photosToSave: [Photo], _ finishHandler: FinishHandler? = nil) {
@@ -39,7 +39,7 @@ class PhotoSaver {
             photo.getCachedImage { (image) in
                 guard let image = image else {
                     // TODO: - Check the leave problem
-                    print("---savingDispatchGroup.leave()")
+                    dPrint("---savingDispatchGroup.leave()")
                     savingDispatchGroup.leave()
                     return
                 }
@@ -48,14 +48,14 @@ class PhotoSaver {
                     let imagePath = photo.cachedKey?.kf.md5 ?? ""
                     let imagePahtUrl = self.saveImageShareDirectory?.appendingPathComponent(imagePath)
                     let isSaveSuccess = FileManager.default.createFile(atPath: imagePahtUrl!.path, contents: data, attributes: nil)
-                    print("--imagePath: " + "\(String(describing: imagePahtUrl))" + "\\n save success? " + "\(isSaveSuccess)")
+                    dPrint("--imagePath: " + "\(String(describing: imagePahtUrl))" + "\\n save success? " + "\(isSaveSuccess)")
                 }
                 
                 savingDispatchGroup.leave()
             }
         }
         savingDispatchGroup.notify(queue: .main) {
-            print("---结束存储(SharedDirectory)---")
+            dPrint("---结束存储(SharedDirectory)---")
             finishHandler?(true)
         }
     }
@@ -79,7 +79,7 @@ class PhotoSaver {
         savingDispatchGroup.notify(queue: .main) {
             SavePhotosManager.saveImageInAlbum(images: imagesToSave) { (result) in
                 DispatchQueue.main.async {
-                    print("---结束存储(SystemAlbum)---")
+                    dPrint("---结束存储(SystemAlbum)---")
                     switch result {
                     case .success:
                         finishHandler?(true)

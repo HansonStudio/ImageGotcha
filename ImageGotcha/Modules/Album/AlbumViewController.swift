@@ -86,7 +86,7 @@ extension AlbumViewController {
             do {
                 try FileManager.default.createDirectory(at: imageFolder, withIntermediateDirectories: true, attributes: nil)
             } catch {
-                print("error to create share directory")
+                dPrint("error to create share directory")
             }
         }
         saveImageShareDirectory = imageFolder
@@ -145,7 +145,7 @@ extension AlbumViewController {
             do {
                 try FileManager.default.removeItem(at: url)
             } catch let error {
-                print(" Error: \(error.localizedDescription)")
+                dPrint(" Error: \(error.localizedDescription)")
             }
         }
         getImageData()

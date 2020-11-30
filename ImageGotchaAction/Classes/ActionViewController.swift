@@ -229,7 +229,7 @@ extension ActionViewController {
                             PHPhotoLibrary.shared().performChanges({
                                 PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: destinationURL)}) { completed, error in
                                     if completed {
-                                        print("Video asset created")
+                                        dPrint("Video asset created")
                                     } else {
                                         print(error!)
                                     }
@@ -242,14 +242,14 @@ extension ActionViewController {
                 }.resume()
             
         } else {
-            print("File already exists at destination url")
+            dPrint("File already exists at destination url")
             let destinationURL = documentsDirectoryURL.appendingPathComponent(videoURL.lastPathComponent)
             PHPhotoLibrary.requestAuthorization({ (authorizationStatus: PHAuthorizationStatus) -> Void in
                 if authorizationStatus == .authorized {
                     PHPhotoLibrary.shared().performChanges({
                         PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: destinationURL)}) { completed, error in
                             if completed {
-                                print("Video asset created")
+                                dPrint("Video asset created")
                             } else {
                                 print(error!)
                             }

@@ -27,7 +27,7 @@ extension UIColor {
                     let alphaHex = Int(alphaHexValue)
                     alpha = CGFloat(alphaHex & 0x000000FF) / 255.0
                 } else {
-                    print("scan alphaHex error")
+                    dPrint("scan alphaHex error")
                 }
             }
             
@@ -41,13 +41,13 @@ extension UIColor {
                     green = CGFloat((hex & 0x00FF00) >> 8)  / 255.0
                     blue  = CGFloat(hex & 0x0000FF) / 255.0
                 } else {
-                    print("invalid rgb string, length should be 6")
+                    dPrint("invalid rgb string, length should be 6")
                 }
             } else {
-                print("scan hex error")
+                dPrint("scan hex error")
             }
         } else {
-            print("invalid rgb string, missing '#' as prefix")
+            dPrint("invalid rgb string, missing '#' as prefix")
         }
         self.init(red:red, green:green, blue:blue, alpha:alpha)
     }

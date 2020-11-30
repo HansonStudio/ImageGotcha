@@ -130,9 +130,9 @@ extension PhotosInteractionAnimator {
         let maximumDelta = CGFloat(fromView.bounds.height / 3.0)
         let deltaAsPercentageOfMaximum = min(abs(delta) / maximumDelta, 1.0)
         let changeAlpha = startingAlpha - (deltaAsPercentageOfMaximum * totalAvailableAlpha)
-//        print("delta: " + "\(delta)")
-//        print("deltaAsPercentageOfMaximum: " + "\(deltaAsPercentageOfMaximum)")
-//        print("changeAlpha: " + "\(changeAlpha)")
+//        dPrint("delta: " + "\(delta)")
+//        dPrint("deltaAsPercentageOfMaximum: " + "\(deltaAsPercentageOfMaximum)")
+//        dPrint("changeAlpha: " + "\(changeAlpha)")
         return changeAlpha
     }
 }
