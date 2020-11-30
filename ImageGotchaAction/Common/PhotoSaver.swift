@@ -35,19 +35,17 @@ class PhotoSaver {
         let savingDispatchGroup = DispatchGroup()
         
         for photo in photosToSave {
-            guard let imageUrl = photo.imageURL
-                , photo.hasCachedImage(imageUrl) else { continue }
-            
             savingDispatchGroup.enter()
-            
-            photo.getCachedImage(imageUrl) { (image) in
+            photo.getCachedImage { (image) in
                 guard let image = image else {
+                    // TODO: - Check the leave problem
+                    print("---savingDispatchGroup.leave()")
                     savingDispatchGroup.leave()
                     return
                 }
                 
                 if let data = DefaultCacheSerializer.default.data(with: image, original: nil) {
-                    let imagePath = imageUrl.cacheKey.kf.md5
+                    let imagePath = photo.cachedKey?.kf.md5 ?? ""
                     let imagePahtUrl = self.saveImageShareDirectory?.appendingPathComponent(imagePath)
                     let isSaveSuccess = FileManager.default.createFile(atPath: imagePahtUrl!.path, contents: data, attributes: nil)
                     print("--imagePath: " + "\(String(describing: imagePahtUrl))" + "\\n save success? " + "\(isSaveSuccess)")
@@ -67,12 +65,8 @@ class PhotoSaver {
         
         var imagesToSave = [UIImage]()
         for photo in photosToSave {
-            guard let imageUrl = photo.imageURL
-                , photo.hasCachedImage(imageUrl) else { continue }
-            
             savingDispatchGroup.enter()
-            
-            photo.getCachedImage(imageUrl) { (image) in
+            photo.getCachedImage { (image) in
                 guard let image = image else {
                     savingDispatchGroup.leave()
                     return

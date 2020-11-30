@@ -15,11 +15,6 @@ import Photos
 public protocol PhotoViewable: class {
     var image: UIImage? { get }
     var imageURL: URL? { get set }
-    
-    func loadImageWithCompletionHandler(_ completion: @escaping (_ image: UIImage?, _ error: Error?) -> ())
-    func getCachedImage(_ url: URL?, completion: @escaping ((_ image: UIImage?) -> Void))
-    func getMemoryCachedImage() -> UIImage?
-    func hasCachedImage(_ url: URL?) -> Bool
 }
 
 public class Photo: PhotoViewable {
@@ -52,64 +47,28 @@ public class Photo: PhotoViewable {
         }
     }
     
-    public func loadImageWithCompletionHandler(_ completion: @escaping (_ image: UIImage?, _ error: Error?) -> ()) {
-        if let image = image {
-            completion(image, nil)
-            return
-        }
-        loadImageWithURL(imageURL, completion: completion)
-    }
-    
-    public func getMemoryCachedImage() -> UIImage? {
-        guard let cacheKey = cachedKey else { return nil }
-        let cacheType = ImageCache.default.imageCachedType(forKey: cacheKey)
-        if cacheType == .memory {
-            let cachedImage = ImageCache.default.retrieveImageInMemoryCache(forKey: cacheKey)
-            return cachedImage
-        } else {
-            return nil
-        }
-    }
-
-    public func getCachedImage(_ url: URL?, completion: @escaping ((_ image: UIImage?) -> Void)) {
-        guard let cacheKey = cachedKey else {
-            completion(nil)
-            return
-        }
-        let options: [KingfisherOptionsInfoItem] = [.processor(WebPProcessor.default)]
-        let cacheType = ImageCache.default.imageCachedType(forKey: cacheKey)
-        if cacheType == .memory {
-            let cachedImage = ImageCache.default.retrieveImageInMemoryCache(forKey: cacheKey, options: options)
-            completion(cachedImage)
-        } else if cacheType == .disk {
-            ImageCache.default.retrieveImageInDiskCache(forKey: cacheKey, options: options) { result in
+    public func getCachedImage(completion: @escaping ((_ image: UIImage?) -> Void)) {
+        if let dataProvider = imageDataProvider, isBase64Image {
+            _ = KingfisherManager.shared.retrieveImage(with: .provider(dataProvider)) { (result) in
                 switch result {
-                case .success(let image):
-                    completion(image)
-                case .failure(_):
+                case .success(let resultValue):
+                    completion(resultValue.image)
+                case .failure(let error):
                     completion(nil)
+                    print("---GetCachedImage Error: \(error.localizedDescription)")
+                }
+            }
+        } else if let url = imageURL {
+            KingfisherManager.shared.retrieveImage(with: url) { (result) in
+                switch result {
+                case .success(let resultValue):
+                    completion(resultValue.image)
+                case .failure(let error):
+                    completion(nil)
+                    print("---GetCachedImage Error: \(error.localizedDescription)")
                 }
             }
         }
-    }
-
-    public func hasCachedImage(_ url: URL?) -> Bool {
-        guard let url = url else { return false }
-        return ImageCache.default.imageCachedType(forKey: url.cacheKey).cached
-    }
-
-    func loadImageWithURL(_ url: URL?, completion: @escaping (_ image: UIImage?, _ error: Error?) -> ()) {
-        guard let url = url else { return }
-        ImageDownloader.default.downloadImage(with: url, options: nil, completionHandler:  { (result) in
-            switch result {
-            case .success(let loadingResult):
-                let image = loadingResult.image
-                ImageCache.default.store(image, forKey: url.cacheKey)
-                completion(image, nil)
-            case .failure(_):
-                completion(nil, NSError(domain: "PhotoDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "Couldn't load image"]))
-            }
-        })
     }
 }
 
