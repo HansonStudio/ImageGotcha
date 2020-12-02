@@ -559,7 +559,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"##run echo:$PROJECT_DIR\";\nif which \"$PROJECT_DIR\"/SwiftGen5/bin/swiftgen >/dev/null; then\nset -e\n\"$PROJECT_DIR\"/SwiftGen5/bin/swiftgen xcassets -t vy-swift4 \"$PROJECT_DIR/ImageGotcha/Resources/Assets.xcassets\" --output \"$PROJECT_DIR/ImageGotcha/Common/ImageAsset.swift\"\n\"$PROJECT_DIR\"/SwiftGen5/bin/swiftgen strings -t vy-flat-swift4 \"$PROJECT_DIR/ImageGotcha/SupportFiles/zh-Hans.lproj/Localizable.strings\" --output \"$PROJECT_DIR/ImageGotcha/Shared/StringAsset.swift\"\nelse\necho \"##run echo warning: SwiftGen not installed, download it from https://github.com/SwiftGen/SwiftGen\"\nfi\n";
+			shellScript = "echo \"##run echo:$PROJECT_DIR\";\nif which \"$PROJECT_DIR\"/SwiftGen5/bin/swiftgen >/dev/null; then\nset -e\n\"$PROJECT_DIR\"/SwiftGen5/bin/swiftgen xcassets -t vy-swift4 \"$PROJECT_DIR/ImageGotcha/Resources/Assets.xcassets\" --output \"$PROJECT_DIR/ImageGotcha/Common/ImageAsset.swift\"\n\"$PROJECT_DIR\"/SwiftGen5/bin/swiftgen strings -t vy-flat-swift4 \"$PROJECT_DIR/ImageGotcha/SupportFiles/zh-Hans.lproj/Localizable.strings\" --output \"$PROJECT_DIR/Shared/StringAsset.swift\"\nelse\necho \"##run echo warning: SwiftGen not installed, download it from https://github.com/SwiftGen/SwiftGen\"\nfi\n";
 		};
 		C0FADA7509B9269917EE366C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
