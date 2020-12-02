@@ -21,19 +21,18 @@ public class PhotosViewController: UIViewController, UIPageViewControllerDataSou
     public var willDismissHandler: PhotosViewControllerDismissHandler?
     public var didDismissHandler: PhotosViewControllerDismissHandler?
     public var longPressGestureHandler: PhotosViewControllerLongPressHandler?
-    public var actionButtonTappedHandler: PhotosViewControllerActionButtonTapped?
     
     var overlayView: PhotosOverlayView?
     var currentPhotoViewController: PhotoViewController? {
         return pageViewController.viewControllers?.first as? PhotoViewController
     }
 
-    var currentPhoto: PhotoViewable? {
+    public var currentPhoto: PhotoViewable? {
         return currentPhotoViewController?.photo
     }
 
     private(set) var pageViewController: UIPageViewController!
-    private(set) var actionButtonStyle: ActionButtonStyle = .download
+    private(set) var actionButtons: [UIButton] = []
     private(set) var isHideURLTextView: Bool = false
     private(set) var dataSource: PhotosDataSource
     private(set) lazy var singleTapGestureRecognizer: UITapGestureRecognizer = {
@@ -54,9 +53,15 @@ public class PhotosViewController: UIViewController, UIPageViewControllerDataSou
     
     // MARK: - Initialization
     
-    public init(photos: [PhotoViewable], initialPhoto: PhotoViewable? = nil, referenceView: UIView? = nil, actionButtonStyle: ActionButtonStyle = .download, isHideURLTextView: Bool = false) {
-        dataSource = PhotosDataSource(photos: photos)
-        self.actionButtonStyle = actionButtonStyle
+    public init(
+        photos: [PhotoViewable],
+        initialPhoto: PhotoViewable? = nil,
+        referenceView: UIView? = nil,
+        actionButtons: [UIButton] = [],
+        isHideURLTextView: Bool = false) {
+        
+        self.dataSource = PhotosDataSource(photos: photos)
+        self.actionButtons = actionButtons
         self.isHideURLTextView = isHideURLTextView
         super.init(nibName: nil, bundle: nil)
         initialSetupWith(initialPhoto, referenceView)
@@ -242,7 +247,7 @@ extension PhotosViewController {
     private func setupOverlayView() {
         overlayView = PhotosOverlayView(frame: CGRect.zero)
         overlayView?.urlTextView.isHidden = isHideURLTextView
-        overlayView?.actionButtonStyle = actionButtonStyle
+        overlayView?.actionButtons = actionButtons
         overlayView?.photosViewController = self
         
         updateCurrentPhotosInformation()
@@ -251,7 +256,6 @@ extension PhotosViewController {
         overlayView?.frame = view.bounds
         view.addSubview(overlayView!)
         overlayView?.setHidden(true, animated: false)
-        overlayView?.actionButton.addTarget(self, action: #selector(downloadButtonTapped), for: .touchUpInside)
     }
     
     private func initializePhotoViewControllerForPhoto(_ photo: PhotoViewable) -> PhotoViewController {
@@ -286,13 +290,6 @@ extension PhotosViewController {
         blurContentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.insertSubview(backgroundView, at: 0)
         backgroundView.addSubview(blurContentView)
-    }
-    
-    @objc private func downloadButtonTapped(sender: UIButton) {
-        if let currentPhoto = currentPhoto {
-            guard let downloadButtonTappedHandler = self.actionButtonTappedHandler else { return }
-            downloadButtonTappedHandler(currentPhoto)
-        }
     }
 }
 

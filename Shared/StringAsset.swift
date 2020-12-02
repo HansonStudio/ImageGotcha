@@ -35,6 +35,8 @@ enum LocalizedStr {
   static let opensource = LocalizedStr.tr("Localizable", "opensource")
   /// 图片
   static let picture = LocalizedStr.tr("Localizable", "Picture")
+  /// 保存
+  static let save = LocalizedStr.tr("Localizable", "save")
   /// 保存失败
   static let saveFail = LocalizedStr.tr("Localizable", "saveFail")
   /// 保存图片

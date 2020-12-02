@@ -1,5 +1,5 @@
 //
-//  AlbumViewBottomToolBar.swift
+//  BottomToolBar.swift
 //  ImageGotcha
 //
 //  Created by Hanson on 2018/5/9.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AlbumViewBottomToolBar: UIView {
+class BottomToolBar: UIView {
 
     lazy var selectAllButton: UIButton = {
         let button = UIButton()
@@ -16,10 +16,11 @@ class AlbumViewBottomToolBar: UIView {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.setTitle(LocalizedStr.cancelSelectAll, for: .selected)
         button.setTitle(LocalizedStr.selectAll, for: .normal)
+//        button.setTitleColor(UIColor.white, for: .selected)
         return button
     }()
     
-    lazy var deleteButton: UIButton = {
+    lazy var rightButton: UIButton = {
         let button = UIButton()
         button.setTitleColor(UIColor.red, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
@@ -33,12 +34,12 @@ class AlbumViewBottomToolBar: UIView {
         
         self.backgroundColor = UIColor(rgba: "#E5E5E5").withAlphaComponent(0.9)
         self.addSubview(selectAllButton)
-        self.addSubview(deleteButton)
+        self.addSubview(rightButton)
         selectAllButton.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview()
             make.left.equalTo(10)
         }
-        deleteButton.snp.makeConstraints { (make) in
+        rightButton.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview()
             make.right.equalTo(-10)
         }

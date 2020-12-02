@@ -21,6 +21,8 @@ MyExtensionJavaScriptClass.prototype = {
 var ExtensionPreprocessingJS = new MyExtensionJavaScriptClass;
 
 
+// MARK: - 获取 URL
+
 // <img> 标签
 function getDomImages() {
     const imgUrls = [];

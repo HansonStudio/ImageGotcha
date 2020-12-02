@@ -54,7 +54,7 @@ class VideoCollectionViewCell: UICollectionViewCell, Reusable {
 }
 
 extension VideoCollectionViewCell {
-    func configureCell(_ model: CellModel) {
+    func configureCell(_ model: ImageGalleryCellModel) {
         overlayView.isHidden = !model.isSelected
         selectImageView.isHidden = !model.isSelected
         let scale: CGFloat = model.isSelected ? 0.95 : 1.0

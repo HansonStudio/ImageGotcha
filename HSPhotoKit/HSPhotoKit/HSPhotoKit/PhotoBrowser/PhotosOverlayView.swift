@@ -8,21 +8,11 @@
 
 import UIKit
 
-public enum ActionButtonStyle {
-    case download
-    case share
-}
-
 class PhotosOverlayView: UIView {
-    
-    var actionButtonStyle: ActionButtonStyle = .download {
+    var actionStackView: UIStackView!
+    var actionButtons: [UIButton] = [] {
         didSet {
-            switch actionButtonStyle {
-            case .download:
-                actionButton.setBackgroundImage(UIImage(systemName: "tray.and.arrow.down"), for: .normal)
-            case .share:
-                actionButton.setBackgroundImage(UIImage(systemName: "square.and.arrow.up"), for: .normal)
-            }
+            updateActionStackView()
         }
     }
     
@@ -32,12 +22,6 @@ class PhotosOverlayView: UIView {
         button.setBackgroundImage(buttonImage, for: .normal)
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 21)
         button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
-        return button
-    }()
-    
-    lazy var actionButton: UIButton = {
-        let button = UIButton()
-        button.setBackgroundImage(UIImage(systemName: "tray.and.arrow.down"), for: .normal)
         return button
     }()
     
@@ -59,7 +43,6 @@ class PhotosOverlayView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setUpView()
     }
 
@@ -80,31 +63,37 @@ class PhotosOverlayView: UIView {
     }
     
     private func setUpView() {
+        actionStackView = UIStackView()
+        actionStackView.axis = .horizontal
+        actionStackView.distribution = .equalSpacing
+        actionStackView.spacing = 50
+        actionStackView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(actionStackView)
+        let center = actionStackView.centerXAnchor.constraint(equalTo: centerXAnchor)
+        let bottom = actionStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10)
+        NSLayoutConstraint.activate([center, bottom])
+        
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         addSubview(closeButton)
         let topConstraint = NSLayoutConstraint(item: closeButton, attribute: .top, relatedBy: .equal, toItem: self, attribute: .topMargin, multiplier: 1.0, constant: 10.0)
         let widthConstraint = NSLayoutConstraint(item: closeButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: 84)
         let heightConstraint = NSLayoutConstraint(item: closeButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1.0, constant: 30)
         let rightPositionConstraint = NSLayoutConstraint(item: closeButton, attribute: .right, relatedBy: .equal, toItem: self, attribute: .right, multiplier: 1.0, constant: -10.0)
-        self.addConstraints([topConstraint, widthConstraint, heightConstraint, rightPositionConstraint])
-        
-        actionButton.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(actionButton)
-        let bottomConstraint = NSLayoutConstraint(item: actionButton, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottomMargin, multiplier: 1.0, constant: -20.0)
-        let centerXConstraint = NSLayoutConstraint(item: actionButton, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.0, constant: 0)
-        let actionBtnWidthConstraint = NSLayoutConstraint(item: actionButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 35)
-        let actionBtnHeightConstraint = NSLayoutConstraint(item: actionButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 35)
-        self.addConstraints([bottomConstraint, centerXConstraint, actionBtnWidthConstraint, actionBtnHeightConstraint])
+        addConstraints([topConstraint, widthConstraint, heightConstraint, rightPositionConstraint])
         
         urlTextView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(urlTextView)
-        let urlTextViewBottom = urlTextView.bottomAnchor.constraint(equalTo: actionButton.topAnchor, constant: -15)
+        let urlTextViewBottom = urlTextView.bottomAnchor.constraint(equalTo: actionStackView.topAnchor, constant: -15)
         let urlTextViewLeading = urlTextView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 10)
         let urlTextViewTrailing = urlTextView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10)
         let urlTextViewHeight = urlTextView.heightAnchor.constraint(equalToConstant: 50)
         NSLayoutConstraint.activate([urlTextViewBottom, urlTextViewLeading, urlTextViewTrailing, urlTextViewHeight])
     }
 
+    private func updateActionStackView() {
+        actionStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        actionButtons.forEach { actionStackView.addArrangedSubview($0) }
+    }
 }
 
 extension PhotosOverlayView {
