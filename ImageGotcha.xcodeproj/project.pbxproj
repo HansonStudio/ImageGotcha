@@ -197,15 +197,23 @@
 				C0F3948E23E291B200CE6DD2 /* AppState.swift */,
 				C06D90742098768C00F9F9C6 /* Constant.swift */,
 				C021B01D20A69C6F00A1F7CA /* ImageAsset.swift */,
-				C021B01C20A69C6F00A1F7CA /* StringAsset.swift */,
-				C0758B092574F68900471942 /* Common.swift */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		C08C7FD32577379F00256556 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				C0758B092574F68900471942 /* Common.swift */,
+				C021B01C20A69C6F00A1F7CA /* StringAsset.swift */,
+			);
+			path = Shared;
 			sourceTree = "<group>";
 		};
 		C08D8C00204F92CE009A1F0D = {
 			isa = PBXGroup;
 			children = (
+				C08C7FD32577379F00256556 /* Shared */,
 				C08D8C0B204F92CE009A1F0D /* ImageGotcha */,
 				C0D8283D2060ED7300009F62 /* ImageGotchaAction */,
 				C08D8C0A204F92CE009A1F0D /* Products */,
@@ -551,7 +559,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"##run echo:$PROJECT_DIR\";\nif which \"$PROJECT_DIR\"/SwiftGen5/bin/swiftgen >/dev/null; then\nset -e\n\"$PROJECT_DIR\"/SwiftGen5/bin/swiftgen xcassets -t vy-swift4 \"$PROJECT_DIR/ImageGotcha/Resources/Assets.xcassets\" --output \"$PROJECT_DIR/ImageGotcha/Common/ImageAsset.swift\"\n\"$PROJECT_DIR\"/SwiftGen5/bin/swiftgen strings -t vy-flat-swift4 \"$PROJECT_DIR/ImageGotcha/SupportFiles/zh-Hans.lproj/Localizable.strings\" --output \"$PROJECT_DIR/ImageGotcha/Common/StringAsset.swift\"\nelse\necho \"##run echo warning: SwiftGen not installed, download it from https://github.com/SwiftGen/SwiftGen\"\nfi\n";
+			shellScript = "echo \"##run echo:$PROJECT_DIR\";\nif which \"$PROJECT_DIR\"/SwiftGen5/bin/swiftgen >/dev/null; then\nset -e\n\"$PROJECT_DIR\"/SwiftGen5/bin/swiftgen xcassets -t vy-swift4 \"$PROJECT_DIR/ImageGotcha/Resources/Assets.xcassets\" --output \"$PROJECT_DIR/ImageGotcha/Common/ImageAsset.swift\"\n\"$PROJECT_DIR\"/SwiftGen5/bin/swiftgen strings -t vy-flat-swift4 \"$PROJECT_DIR/ImageGotcha/SupportFiles/zh-Hans.lproj/Localizable.strings\" --output \"$PROJECT_DIR/ImageGotcha/Shared/StringAsset.swift\"\nelse\necho \"##run echo warning: SwiftGen not installed, download it from https://github.com/SwiftGen/SwiftGen\"\nfi\n";
 		};
 		C0FADA7509B9269917EE366C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
