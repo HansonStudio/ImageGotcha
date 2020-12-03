@@ -77,7 +77,7 @@ extension ImageGalleryViewController {
         present(galleryPreviewer!, animated: true, completion: nil)
     }
     
-    @objc func showShareImage() {
+    @objc func shareImage() {
         guard let image = galleryPreviewer?.currentPhoto?.image else { return }
         let imageToShare = [image]
         let activityViewController = UIActivityViewController(activityItems: imageToShare, applicationActivities: nil)

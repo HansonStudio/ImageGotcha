@@ -36,7 +36,7 @@ class ImageGalleryViewController: UIViewController {
         let shareButton = UIButton()
         let image = UIImage(systemName: "square.and.arrow.up", withConfiguration: largeConfig)
         shareButton.setBackgroundImage(image, for: .normal)
-        shareButton.addTarget(self, action: #selector(showShareImage), for: .touchUpInside)
+        shareButton.addTarget(self, action: #selector(shareImage), for: .touchUpInside)
         return shareButton
     }()
     
