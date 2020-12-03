@@ -59,6 +59,9 @@ class ActionViewController: ImageGalleryViewController {
     
     private func setupView() {
         collectionView.register(cellType: VideoCollectionViewCell.self)
+        #if targetEnvironment(macCatalyst)
+        collectionView.collectionViewLayout = iOSLayout
+        #endif
         toolBarView.rightButton.setTitle(LocalizedStr.save, for: .normal)
         toolBarView.rightButton.setTitleColor(UIColor(rgba: "#2F8BF8"), for: .normal)
     }
@@ -202,6 +205,23 @@ extension ActionViewController {
                 }
             }
         }
+    }
+}
+
+extension ActionViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        var itemNum: CGFloat = 3
+        var windowWidth = UIScreen.universalBounds.width
+        #if targetEnvironment(macCatalyst)
+        // ActionView Bounds (w: 960.0, h: 600.0) in macOS
+        windowWidth = UIScreen.universalBounds.height
+        #endif
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            itemNum = 6
+        }
+        let itemSpace = 5 * (itemNum + 1)
+        let itemWidth = (windowWidth - itemSpace) / itemNum
+        return CGSize(width: itemWidth, height: itemWidth)
     }
 }
 

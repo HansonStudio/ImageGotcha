@@ -45,7 +45,7 @@ class ImageGalleryViewController: UIViewController {
         height: 90,
         minimumInteritemSpacing: 5,
         minimumLineSpacing: 5,
-        sectionInset: EdgeInsets(top: 5, left: 10, bottom: 5, right: 5),
+        sectionInset: EdgeInsets(top: 5, left: 5, bottom: 5, right: 5),
         stickyHeaders: false,
         stickyFooters: false)
     

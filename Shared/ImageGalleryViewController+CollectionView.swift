@@ -59,26 +59,6 @@ extension ImageGalleryViewController: UICollectionViewDelegate {
     
 }
 
-extension ImageGalleryViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        var itemNum: CGFloat = 3
-        let windowWidth = UIScreen.universalBounds.width
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            if UIDevice.current.orientation.isLandscape {
-                itemNum = 6
-            } else {
-                itemNum = 4
-            }
-        }
-        #if targetEnvironment(macCatalyst)
-        itemNum = 6
-        #endif
-        let itemSpace = 5 * (itemNum - 1)
-        let itemWidth = (windowWidth - itemSpace) / itemNum
-        return CGSize(width: itemWidth, height: itemWidth)
-    }
-}
-
 // MARK: -
 
 extension ImageGalleryViewController {

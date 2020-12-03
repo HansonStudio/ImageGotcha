@@ -93,3 +93,19 @@ extension AlbumViewController {
         toggleSelectionMode()
     }
 }
+
+extension AlbumViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        var itemNum: CGFloat = 3
+        let windowWidth = UIScreen.universalBounds.width
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            itemNum = 6
+        }
+        #if targetEnvironment(macCatalyst)
+        itemNum = 6
+        #endif
+        let itemSpace = 5 * (itemNum - 1)
+        let itemWidth = (windowWidth - itemSpace) / itemNum
+        return CGSize(width: itemWidth, height: itemWidth)
+    }
+}
