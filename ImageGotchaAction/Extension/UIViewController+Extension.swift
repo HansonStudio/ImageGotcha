@@ -10,7 +10,7 @@ import UIKit
 import HSPhotoKit
 
 extension UIViewController {
-    func showSaveAction(photos: [Photo], _ finishHandler: (() -> Void)? = nil) {
+    func showSaveActionAlert(photos: [Photo], sourceView: UIView? = nil, finishHandler: (() -> Void)? = nil) {
         let alert = UIAlertController(title: nil, message: LocalizedStr.savePhoto, preferredStyle: .actionSheet)
         
         // 保存到系统相册选项
@@ -38,7 +38,7 @@ extension UIViewController {
         alert.addAction(saveToAppAlbumAction)
         alert.addAction(cancelAction)
         
-        showAlert(alert)
+        showAlert(alert, soureView: sourceView)
     }
     
     func showResultAlert(isSuccess: Bool) {
@@ -63,13 +63,13 @@ extension UIViewController {
         view.subviews.filter { ($0 as? UIActivityIndicatorView) != nil }.forEach { $0.removeFromSuperview() }
     }
     
-    func showAlert(_ alert: UIAlertController) {
+    func showAlert(_ alert: UIAlertController, soureView: UIView? = nil) {
         if UIDevice.current.userInterfaceIdiom == .phone {
             UIApplication.presentedViewController(rootController: self)?.present(alert, animated: true, completion: nil)
         } else {
             let popoverController = alert.popoverPresentationController
-            popoverController?.sourceView = self.view
-            popoverController?.sourceRect = CGRect(x: view.bounds.width/2, y: view.bounds.height/2, width: 0, height: 0)
+            popoverController?.sourceView = soureView
+            popoverController?.sourceRect = soureView?.bounds ?? CGRect(x: view.bounds.width/2, y: view.bounds.height/2, width: 0, height: 0)
             UIApplication.presentedViewController(rootController: self)?.present(alert, animated: true, completion: nil)
         }
     }

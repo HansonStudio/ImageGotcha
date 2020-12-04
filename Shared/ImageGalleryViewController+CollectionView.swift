@@ -77,7 +77,7 @@ extension ImageGalleryViewController {
         present(galleryPreviewer!, animated: true, completion: nil)
     }
     
-    @objc func shareImage() {
+    @objc func shareImage(sender: UIButton) {
         guard let image = galleryPreviewer?.currentPhoto?.image else { return }
         let imageToShare = [image]
         let activityViewController = UIActivityViewController(activityItems: imageToShare, applicationActivities: nil)
@@ -86,9 +86,8 @@ extension ImageGalleryViewController {
             UIApplication.presentedViewController(rootController: self)?.present(activityViewController, animated: true, completion: nil)
         } else {
             let popoverController = activityViewController.popoverPresentationController
-            popoverController?.sourceView = self.view
-            // TODO: - Test in iPad
-//            popoverController?.sourceRect = CGRect(x: view.bounds.width/2, y: view.bounds.height, width: 0, height: 0)
+            popoverController?.sourceView = sender
+            popoverController?.sourceRect = sender.bounds
             UIApplication.presentedViewController(rootController: self)?.present(activityViewController, animated: true, completion: nil)
         }
     }

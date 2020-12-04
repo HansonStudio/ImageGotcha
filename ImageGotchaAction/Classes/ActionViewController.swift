@@ -49,7 +49,23 @@ class ActionViewController: ImageGalleryViewController {
     }
     
     @objc override func bottomToolBarRightButtonDidTap(sender: UIButton) {
-        saveSeletedImages()
+        photosToSave.removeAll()
+        videosToSave.removeAll()
+        for model in cellModels {
+            if model.isSelected {
+                if model.cellModelType == .image {
+                    photosToSave.append(model.photo!)
+                } else {
+                    videosToSave.append(model.videoUrl)
+                }
+            }
+        }
+        if photosToSave.count > 0 || videosToSave.count > 0 {
+            showSaveActionAlert(photos: photosToSave, sourceView: sender) { [weak self] in
+                guard let self = self else { return }
+                self.setEditing(!self.isEditing, animated: true)
+            }
+        }
     }
     
     private func configuration() {
@@ -70,26 +86,6 @@ class ActionViewController: ImageGalleryViewController {
     
     @IBAction func close(_ sender: Any) {
         self.extensionContext!.completeRequest(returningItems: nil, completionHandler: nil)
-    }
-
-    func saveSeletedImages() {
-        photosToSave.removeAll()
-        videosToSave.removeAll()
-        for model in cellModels {
-            if model.isSelected {
-                if model.cellModelType == .image {
-                    photosToSave.append(model.photo!)
-                } else {
-                    videosToSave.append(model.videoUrl)
-                }
-            }
-        }
-        if photosToSave.count > 0 || videosToSave.count > 0 {
-            showSaveAction(photos: photosToSave) { [weak self] in
-                guard let self = self else { return }
-                self.setEditing(!self.isEditing, animated: true)
-            }
-        }
     }
 }
 
@@ -151,11 +147,11 @@ extension ActionViewController {
         collectionView.reloadData()
     }
     
-    @objc func saveSinglePhoto() {
+    @objc func saveSinglePhoto(sender: UIButton) {
         guard let photo = galleryPreviewer?.currentPhoto as? Photo else { return }
         photosToSave.removeAll()
         photosToSave.append(photo)
-        showSaveAction(photos: photosToSave)
+        showSaveActionAlert(photos: photosToSave, sourceView: sender)
     }
 }
 
@@ -192,9 +188,6 @@ extension ActionViewController {
                 collectionView.deselectItem(at: indexPath, animated: false)
                 currentPhoto?.image = currentItem.imageView.image
                 showGalleryPreviewer(currentPhoto: currentPhoto, currentItem: currentItem, actionButtons: [saveButton, shareButton])
-                galleryPreviewer?.longPressGestureHandler = { [weak self] (photo, _) in
-                    self?.saveSinglePhoto()
-                }
             case .video:
                 guard let videoUrl = cellModel.videoUrl else { return }
                 let player = AVPlayer(url: videoUrl)

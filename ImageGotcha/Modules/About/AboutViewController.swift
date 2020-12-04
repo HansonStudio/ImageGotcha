@@ -77,13 +77,12 @@ extension AboutViewController: UITableViewDelegate, UITableViewDataSource {
             if UIDevice.current.userInterfaceIdiom == .phone {
                 self.present(activityViewController, animated: true, completion: nil)
             } else {
+                let cell = tableView.cellForRow(at: indexPath)
                 let popover = activityViewController.popoverPresentationController
-                if (popover != nil){
-                    popover?.sourceView = self.view
-                    popover?.sourceRect = self.view.frame
-                    popover?.permittedArrowDirections = .any
-                    self.present(activityViewController, animated: true, completion: nil)
-                }
+                popover?.sourceView = cell
+                popover?.sourceRect = cell?.bounds ?? tableView.bounds
+                // popover?.permittedArrowDirections = .any
+                self.present(activityViewController, animated: true, completion: nil)
             }
             
         case .opensource:
