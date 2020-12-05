@@ -86,7 +86,7 @@ class PhotosOverlayView: UIView {
         let urlTextViewBottom = urlTextView.bottomAnchor.constraint(equalTo: actionStackView.topAnchor, constant: -15)
         let urlTextViewLeading = urlTextView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 10)
         let urlTextViewTrailing = urlTextView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10)
-        let urlTextViewHeight = urlTextView.heightAnchor.constraint(equalToConstant: 50)
+        let urlTextViewHeight = urlTextView.heightAnchor.constraint(equalToConstant: 60)
         NSLayoutConstraint.activate([urlTextViewBottom, urlTextViewLeading, urlTextViewTrailing, urlTextViewHeight])
     }
 

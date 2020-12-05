@@ -188,7 +188,7 @@ extension ActionViewController {
                 let currentPhoto = cellModel.photo
                 collectionView.deselectItem(at: indexPath, animated: false)
                 currentPhoto?.image = currentItem.imageView.image
-                showGalleryPreviewer(currentPhoto: currentPhoto, currentItem: currentItem, actionButtons: [saveButton, shareButton])
+                showGalleryPreviewer(currentPhoto: currentPhoto, currentItem: currentItem, actionButtons: [saveButton, shareButton], hideURLTextView: false)
             case .video:
                 guard let videoUrl = cellModel.videoUrl else { return }
                 let player = AVPlayer(url: videoUrl)

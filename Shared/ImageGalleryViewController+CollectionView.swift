@@ -63,8 +63,8 @@ extension ImageGalleryViewController: UICollectionViewDelegate {
 
 extension ImageGalleryViewController {
     
-    func showGalleryPreviewer(currentPhoto: Photo? = nil, currentItem: UIView? = nil, actionButtons: [UIButton] = []) {
-        galleryPreviewer = PhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: currentItem, actionButtons: actionButtons, isHideURLTextView: true)
+    func showGalleryPreviewer(currentPhoto: Photo? = nil, currentItem: UIView? = nil, actionButtons: [UIButton] = [], hideURLTextView: Bool = false) {
+        galleryPreviewer = PhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: currentItem, actionButtons: actionButtons, isHideURLTextView: hideURLTextView)
         galleryPreviewer?.referenceViewForPhotoWhenDismissingHandler = { [weak self] photo in
             guard let self = self else { return nil }
             guard let index = self.photos.firstIndex(where: {$0 === photo}) else { return nil }
