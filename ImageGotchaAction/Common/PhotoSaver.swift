@@ -33,29 +33,23 @@ class PhotoSaver {
     
     func savePhotoToShareDirectory(photosToSave: [Photo], _ finishHandler: FinishHandler? = nil) {
         let savingDispatchGroup = DispatchGroup()
-        
+        var savedCount = 0
         for photo in photosToSave {
             savingDispatchGroup.enter()
             photo.getCachedImage { (image) in
-                guard let image = image else {
-                    // TODO: - Check the leave problem
-                    dPrint("---savingDispatchGroup.leave()")
-                    savingDispatchGroup.leave()
-                    return
-                }
-                
-                if let data = DefaultCacheSerializer.default.data(with: image, original: nil) {
+                if let image = image, let data = DefaultCacheSerializer.default.data(with: image, original: nil) {
                     let imagePath = photo.cachedKey?.kf.md5 ?? ""
                     let imagePahtUrl = self.saveImageShareDirectory?.appendingPathComponent(imagePath)
                     let isSaveSuccess = FileManager.default.createFile(atPath: imagePahtUrl!.path, contents: data, attributes: nil)
+                    if isSaveSuccess {
+                        savedCount += 1
+                    }
                     dPrint("--imagePath: " + "\(String(describing: imagePahtUrl))" + "\\n save success? " + "\(isSaveSuccess)")
                 }
-                
                 savingDispatchGroup.leave()
             }
         }
         savingDispatchGroup.notify(queue: .main) {
-            dPrint("---结束存储(SharedDirectory)---")
             finishHandler?(true)
         }
     }

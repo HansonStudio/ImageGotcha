@@ -54,8 +54,8 @@ public class Photo: PhotoViewable {
                 case .success(let resultValue):
                     completion(resultValue.image)
                 case .failure(let error):
+                    dPrint("---GetCachedImage; Base64URL: \(String(describing: self.imageURL)) Error: \(error.localizedDescription)")
                     completion(nil)
-                    dPrint("---GetCachedImage Error: \(error.localizedDescription)")
                 }
             }
         } else if let url = imageURL {
@@ -64,10 +64,12 @@ public class Photo: PhotoViewable {
                 case .success(let resultValue):
                     completion(resultValue.image)
                 case .failure(let error):
+                    dPrint("---GetCachedImage; URL: \(url) Error: \(error.localizedDescription)")
                     completion(nil)
-                    dPrint("---GetCachedImage Error: \(error.localizedDescription)")
                 }
             }
+        } else {
+            completion(nil)
         }
     }
 }
