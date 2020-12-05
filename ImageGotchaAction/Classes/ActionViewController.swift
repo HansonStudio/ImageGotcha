@@ -64,6 +64,7 @@ class ActionViewController: ImageGalleryViewController {
             showSaveActionAlert(photos: photosToSave, sourceView: sender) { [weak self] in
                 guard let self = self else { return }
                 self.setEditing(!self.isEditing, animated: true)
+                self.photosToSave.removeAll()
             }
         }
     }

@@ -11,16 +11,8 @@ import Photos
 import Kingfisher
 import KingfisherWebP
 
-//操作结果
-public enum SavePhotosResult {
-    case success, error, denied
-}
-
-public typealias saveImageCompletion = (_ result: SavePhotosResult) -> Void
-
 public class SavePhotosManager {
 
-    
     public class func checkAuthorization(handler: @escaping (PHAuthorizationStatus) -> Void) {
         var currentStatus: PHAuthorizationStatus
         
@@ -46,14 +38,13 @@ public class SavePhotosManager {
         }
     }
     
-    public class func saveImageInAlbum(images: [UIImage], completion: @escaping saveImageCompletion) {
+    public class func saveImageInAlbum(images: [UIImage], completion: @escaping (Result<Void, PhotoSaverError>) -> Void) {
         // 检查权限
         checkAuthorization() { status in
-            
             if #available(iOS 14, *) {
-                guard status == .authorized || status == .limited else { completion(.denied); return }
+                guard status == .authorized || status == .limited else { completion(.failure(.denied)); return }
             } else {
-                guard status == .authorized else { completion(.denied); return }
+                guard status == .authorized else { completion(.failure(.denied)); return }
             }
             
             // 以 App 的名称作为相册名
@@ -83,10 +74,9 @@ public class SavePhotosManager {
                     }
                 } completionHandler: { (isSuccess, error) in
                     if isSuccess {
-                        completion(.success)
+                        completion(.success(()))
                     } else {
-                        dPrint("--- PHAssetChangeRequest Error: \(error!.localizedDescription)")
-                        completion(.error)
+                        completion(.failure(.system(description: error?.localizedDescription)))
                     }
                 }
             }
@@ -133,22 +123,6 @@ public class SavePhotosManager {
             }
         } else {
             completion(.success(assetAlbum!))
-        }
-    }
-}
-
-public enum PhotoSaverError: Error {
-    case limitedAccess
-    case createAlbumFail(description: String)
-}
-
-extension PhotoSaverError {
-    public var localizedDescription: String {
-        switch self {
-        case .limitedAccess:
-            return "权限不足"
-        case .createAlbumFail(let description):
-            return "创建相册失败: \(description)"
         }
     }
 }

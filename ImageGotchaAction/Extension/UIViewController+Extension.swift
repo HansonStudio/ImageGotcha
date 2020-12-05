@@ -16,18 +16,18 @@ extension UIViewController {
         // 保存到系统相册选项
         let saveToSystemAlbumAction = UIAlertAction(title: LocalizedStr.saveToSystemAlbum, style: .default) { [weak self] (action) in
             self?.showActivityIndicator()
-            PhotoSaver.shared.saveToSystemAlbum(photosToSave: photos) { isSuccess in
+            PhotoSaver.shared.saveToSystemAlbum(photosToSave: photos) { result in
                 self?.dismissActivityIndicator()
-                self?.showResultAlert(isSuccess: isSuccess)
+                self?.showAlert(with: result)
                 finishHandler?()
             }
         }
         // 保存到App内相册选项
         let saveToAppAlbumAction = UIAlertAction(title: LocalizedStr.saveToPrivateAlbum, style: .default) { [weak self] (action) in
             self?.showActivityIndicator()
-            PhotoSaver.shared.savePhotoToShareDirectory(photosToSave: photos) { isSuccess in
+            PhotoSaver.shared.savePhotoToShareDirectory(photosToSave: photos) { result in
                 self?.dismissActivityIndicator()
-                self?.showResultAlert(isSuccess: isSuccess)
+                self?.showAlert(with: result)
                 finishHandler?()
             }
         }
@@ -41,8 +41,14 @@ extension UIViewController {
         showAlert(alert, soureView: sourceView)
     }
     
-    func showResultAlert(isSuccess: Bool) {
-        let message = isSuccess ? LocalizedStr.saveSuccess : LocalizedStr.saveFail
+    func showAlert(with result: Result<Int, Error>) {
+        var message = ""
+        switch result {
+        case .success(let count):
+            message = LocalizedStr.saveSuccess + " : \(count)"
+        case .failure(let error):
+            message = LocalizedStr.saveFail + " : \(error.localizedDescription)"
+        }
         let alert = UIAlertController(title: "", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: LocalizedStr.ok, style: .default))
         showAlert(alert)

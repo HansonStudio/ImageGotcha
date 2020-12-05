@@ -11,7 +11,7 @@ import HSPhotoKit
 import Kingfisher
 
 let AppGroupId: String = "group.com.hanson.imagegotcha"
-public typealias FinishHandler = (_ isSuccess: Bool) -> Void
+public typealias SavePhotoFinishHandler = (Result<Int, Error>) -> Void
 
 class PhotoSaver {
 
@@ -31,7 +31,7 @@ class PhotoSaver {
         dPrint("group dictory: " + "\(String(describing: saveImageShareDirectory?.absoluteString))")
     }
     
-    func savePhotoToShareDirectory(photosToSave: [Photo], _ finishHandler: FinishHandler? = nil) {
+    func savePhotoToShareDirectory(photosToSave: [Photo], _ finishHandler: SavePhotoFinishHandler? = nil) {
         let savingDispatchGroup = DispatchGroup()
         var savedCount = 0
         for photo in photosToSave {
@@ -44,43 +44,37 @@ class PhotoSaver {
                     if isSaveSuccess {
                         savedCount += 1
                     }
-                    dPrint("--imagePath: " + "\(String(describing: imagePahtUrl))" + "\\n save success? " + "\(isSaveSuccess)")
+                    dPrint("--imagePath: " + "\(String(describing: imagePahtUrl))" + " save success? " + "\(isSaveSuccess)")
                 }
                 savingDispatchGroup.leave()
             }
         }
         savingDispatchGroup.notify(queue: .main) {
-            finishHandler?(true)
+            finishHandler?(.success(savedCount))
         }
     }
     
-    func saveToSystemAlbum(photosToSave: [Photo], _ finishHandler: FinishHandler? = nil) {
+    func saveToSystemAlbum(photosToSave: [Photo], _ finishHandler: SavePhotoFinishHandler? = nil) {
         let savingDispatchGroup = DispatchGroup()
-        
         var imagesToSave = [UIImage]()
         for photo in photosToSave {
             savingDispatchGroup.enter()
             photo.getCachedImage { (image) in
-                guard let image = image else {
-                    savingDispatchGroup.leave()
-                    return
+                if let image = image {
+                    imagesToSave.append(image)
                 }
-                imagesToSave.append(image)
-                
                 savingDispatchGroup.leave()
             }
         }
         savingDispatchGroup.notify(queue: .main) {
             SavePhotosManager.saveImageInAlbum(images: imagesToSave) { (result) in
                 DispatchQueue.main.async {
-                    dPrint("---结束存储(SystemAlbum)---")
                     switch result {
-                    case .success:
-                        finishHandler?(true)
-                    case .error, .denied:
-                        finishHandler?(false)
+                    case .success(_):
+                        finishHandler?(.success(0))
+                    case .failure(let error):
+                        finishHandler?(.failure(error))
                     }
-                    
                 }
             }
         }

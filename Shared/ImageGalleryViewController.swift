@@ -92,6 +92,9 @@ class ImageGalleryViewController: UIViewController {
         collectionView.indexPathsForSelectedItems?.forEach({ (indexPath) in
             collectionView.deselectItem(at: indexPath, animated: animated)
         })
+        for i in 0 ..< cellModels.count {
+            cellModels[i].isSelected = false
+        }
     }
     
     @objc private func selectAllImage(sender: UIButton) {
@@ -169,6 +172,7 @@ extension ImageGalleryViewController {
     
     private func updateBottomToolBar() {
         toolBarView.isHidden = false
+        toolBarView.selectAllButton.isSelected = false
         let bottomConstant: CGFloat = isEditing ? -44 : 44
         UIView.animate(withDuration: 0.3) {
             self.toolBarView.transform = CGAffineTransform(translationX: 0, y: bottomConstant)
