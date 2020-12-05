@@ -41,11 +41,15 @@ extension UIViewController {
         showAlert(alert, soureView: sourceView)
     }
     
-    func showAlert(with result: Result<Int, Error>) {
+    func showAlert(with result: Result<Int?, Error>) {
         var message = ""
         switch result {
         case .success(let count):
-            message = LocalizedStr.saveSuccess + " : \(count)"
+            if let count = count {
+                message = LocalizedStr.saveSuccess + " : \(count)"
+            } else {
+                message = LocalizedStr.saveSuccess
+            }
         case .failure(let error):
             message = LocalizedStr.saveFail + " : \(error.localizedDescription)"
         }

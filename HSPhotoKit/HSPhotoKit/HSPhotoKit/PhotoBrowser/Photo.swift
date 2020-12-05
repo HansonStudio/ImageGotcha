@@ -48,8 +48,23 @@ public class Photo: PhotoViewable {
     }
     
     public func getCachedImage(completion: @escaping ((_ image: UIImage?) -> Void)) {
+        
+        let modifier = AnyModifier { request in
+            var r = request
+            r.setValue("Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1", forHTTPHeaderField: "user-agent")
+            // 支持 webp
+            r.addValue("image/webp */*", forHTTPHeaderField: "Accept")
+            return r
+        }
+        
+        let options: [KingfisherOptionsInfoItem] = [
+            .processor(WebPProcessor.default),
+            .cacheSerializer(WebPSerializer.default),
+            .requestModifier(modifier)
+        ]
+        
         if let dataProvider = imageDataProvider, isBase64Image {
-            _ = KingfisherManager.shared.retrieveImage(with: .provider(dataProvider)) { (result) in
+            _ = KingfisherManager.shared.retrieveImage(with: .provider(dataProvider), options: options) { (result) in
                 switch result {
                 case .success(let resultValue):
                     completion(resultValue.image)
@@ -59,7 +74,7 @@ public class Photo: PhotoViewable {
                 }
             }
         } else if let url = imageURL {
-            KingfisherManager.shared.retrieveImage(with: url) { (result) in
+            KingfisherManager.shared.retrieveImage(with: url, options: options) { (result) in
                 switch result {
                 case .success(let resultValue):
                     completion(resultValue.image)

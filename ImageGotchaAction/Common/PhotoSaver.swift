@@ -11,7 +11,7 @@ import HSPhotoKit
 import Kingfisher
 
 let AppGroupId: String = "group.com.hanson.imagegotcha"
-public typealias SavePhotoFinishHandler = (Result<Int, Error>) -> Void
+public typealias SavePhotoFinishHandler = (Result<Int?, Error>) -> Void
 
 class PhotoSaver {
 
@@ -71,7 +71,7 @@ class PhotoSaver {
                 DispatchQueue.main.async {
                     switch result {
                     case .success(_):
-                        finishHandler?(.success(0))
+                        finishHandler?(.success(nil))
                     case .failure(let error):
                         finishHandler?(.failure(error))
                     }
