@@ -49,7 +49,6 @@
 		C0E40E2E208C8F700077F3AA /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E40E25208C8F700077F3AA /* UIColor+Extension.swift */; };
 		C0E40E2F208C8F700077F3AA /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E40E29208C8F700077F3AA /* HomeViewController.swift */; };
 		C0E40E30208C8F700077F3AA /* BaseNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E40E2A208C8F700077F3AA /* BaseNavigationViewController.swift */; };
-		C0E40E31208C8F700077F3AA /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E40E2B208C8F700077F3AA /* TableViewCell.swift */; };
 		C0E40E36208C94840077F3AA /* AlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E40E35208C94840077F3AA /* AlbumViewController.swift */; };
 		C0F3948F23E291B200CE6DD2 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F3948E23E291B200CE6DD2 /* AppState.swift */; };
 /* End PBXBuildFile section */
@@ -137,7 +136,6 @@
 		C0E40E25208C8F700077F3AA /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		C0E40E29208C8F700077F3AA /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		C0E40E2A208C8F700077F3AA /* BaseNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseNavigationViewController.swift; sourceTree = "<group>"; };
-		C0E40E2B208C8F700077F3AA /* TableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		C0E40E35208C94840077F3AA /* AlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumViewController.swift; sourceTree = "<group>"; };
 		C0E40E37208C9D3B0077F3AA /* ImageGotchaAction.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ImageGotchaAction.entitlements; sourceTree = "<group>"; };
 		C0F3948E23E291B200CE6DD2 /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
@@ -351,7 +349,6 @@
 			children = (
 				C0E40E29208C8F700077F3AA /* HomeViewController.swift */,
 				C0E40E2A208C8F700077F3AA /* BaseNavigationViewController.swift */,
-				C0E40E2B208C8F700077F3AA /* TableViewCell.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -590,7 +587,6 @@
 				C08C7FF8257746D500256556 /* BottomToolBar.swift in Sources */,
 				C08C7FDC25773D5000256556 /* ImageGalleryViewController.swift in Sources */,
 				C0F3948F23E291B200CE6DD2 /* AppState.swift in Sources */,
-				C0E40E31208C8F700077F3AA /* TableViewCell.swift in Sources */,
 				C021B00E20A5896600A1F7CA /* OpenSourceViewController.swift in Sources */,
 				C06D90752098768C00F9F9C6 /* Constant.swift in Sources */,
 				C021B01E20A69C6F00A1F7CA /* StringAsset.swift in Sources */,
