@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import Reusable
 
 enum homeSection {
     case tutorial, openSafari, album, about
@@ -21,6 +22,15 @@ enum homeSection {
         case .about: return LocalizedStr.about
         }
     }
+    
+    var icon: UIImage? {
+        switch self {
+        case .tutorial: return UIImage(systemName: "book")
+        case .openSafari: return nil
+        case .album: return UIImage(systemName: "photo.on.rectangle")
+        case .about: return UIImage(systemName: "info.circle")
+        }
+    }
 }
 
 class HomeViewController: UIViewController {
@@ -28,7 +38,8 @@ class HomeViewController: UIViewController {
     private let dataSet: [homeSection] = [.tutorial, .album, .about]
     
     lazy var tableView: UITableView = {
-        let tableView = UITableView()
+        let tableView = UITableView(frame: .zero, style: .insetGrouped)
+        tableView.register(cellType: UITableViewCell.self)
         tableView.separatorStyle = .none
         tableView.tableFooterView = UIView()
         tableView.delegate = self
@@ -41,6 +52,7 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.prefersLargeTitles = true
         title = "ImageGotcha"
         view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
@@ -76,23 +88,30 @@ extension HomeViewController {
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return dataSet.count
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: TableViewCell = TableViewCell()
-        cell.titileLabel.text = dataSet[indexPath.row].description
+        let cell: UITableViewCell = tableView.dequeueReusableCell(for: indexPath)
+        let data = dataSet[indexPath.section]
+        cell.imageView?.image = data.icon
+        cell.textLabel?.text = data.description
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 80
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let section = dataSet[indexPath.row]
+        let section = dataSet[indexPath.section]
         switch section {
         case .tutorial:
             self.navigationController?.pushViewController(TutorialViewController(nibName: "TutorialViewController", bundle: nil), animated: true)
@@ -113,3 +132,5 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
 	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }
+
+extension UITableViewCell: Reusable { }
