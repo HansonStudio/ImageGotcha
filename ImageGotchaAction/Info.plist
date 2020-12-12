@@ -31,8 +31,6 @@
 		<true/>
 		<key>NSExtensionAttributes</key>
 		<dict>
-			<key>NSExtensionServiceRoleType</key>
-			<string>NSExtensionServiceRoleTypeEditor</string>
 			<key>NSExtensionActivationRule</key>
 			<dict>
 				<key>NSExtensionActivationSupportsWebPageWithMaxCount</key>
@@ -40,11 +38,13 @@
 			</dict>
 			<key>NSExtensionJavaScriptPreprocessingFile</key>
 			<string>getImage</string>
+			<key>NSExtensionServiceRoleType</key>
+			<string>NSExtensionServiceRoleTypeEditor</string>
 		</dict>
-		<key>NSExtensionPrincipalClass</key>
-		<string>$(PRODUCT_MODULE_NAME).ActionRootViewController</string>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.ui-services</string>
+		<key>NSExtensionPrincipalClass</key>
+		<string>$(PRODUCT_MODULE_NAME).ActionRootViewController</string>
 	</dict>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Allow to Save Photo to Album</string>
