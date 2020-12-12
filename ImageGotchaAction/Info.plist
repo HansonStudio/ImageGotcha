@@ -31,6 +31,8 @@
 		<true/>
 		<key>NSExtensionAttributes</key>
 		<dict>
+			<key>NSExtensionServiceRoleType</key>
+			<string>NSExtensionServiceRoleTypeEditor</string>
 			<key>NSExtensionActivationRule</key>
 			<dict>
 				<key>NSExtensionActivationSupportsWebPageWithMaxCount</key>
@@ -39,8 +41,8 @@
 			<key>NSExtensionJavaScriptPreprocessingFile</key>
 			<string>getImage</string>
 		</dict>
-		<key>NSExtensionMainStoryboard</key>
-		<string>MainInterface</string>
+		<key>NSExtensionPrincipalClass</key>
+		<string>$(PRODUCT_MODULE_NAME).ActionRootViewController</string>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.ui-services</string>
 	</dict>

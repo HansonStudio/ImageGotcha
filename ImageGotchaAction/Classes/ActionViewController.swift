@@ -14,10 +14,18 @@ import Photos
 import Kingfisher
 import Reusable
 
+class ActionRootViewController: UINavigationController {
+    init() {
+        super.init(rootViewController: ActionViewController())
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 class ActionViewController: ImageGalleryViewController {
-    
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    
+        
     var photosToSave: [Photo] = []
     var videosToSave: [URL?] = []
 
@@ -75,6 +83,9 @@ class ActionViewController: ImageGalleryViewController {
     }
     
     private func setupView() {
+        let closeBarButton = UIBarButtonItem(title: LocalizedStr.cancel, style: UIBarButtonItem.Style.plain, target: self, action: #selector(close))
+        navigationItem.leftBarButtonItem = closeBarButton
+        
         collectionView.register(cellType: VideoCollectionViewCell.self)
         #if targetEnvironment(macCatalyst)
         collectionView.collectionViewLayout = iOSLayout
@@ -85,7 +96,7 @@ class ActionViewController: ImageGalleryViewController {
     
     // MARK: - button Action
     
-    @IBAction func close(_ sender: Any) {
+    @objc func close(_ sender: Any) {
         self.extensionContext!.completeRequest(returningItems: nil, completionHandler: nil)
     }
 }
