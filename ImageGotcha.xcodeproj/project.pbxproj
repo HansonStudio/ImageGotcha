@@ -776,6 +776,7 @@
 				DEVELOPMENT_TEAM = XC238MH24L;
 				INFOPLIST_FILE = "$(SRCROOT)/ImageGotcha/SupportFiles/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 2.0.0;
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"";
@@ -801,6 +802,7 @@
 				DEVELOPMENT_TEAM = XC238MH24L;
 				INFOPLIST_FILE = "$(SRCROOT)/ImageGotcha/SupportFiles/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.HansonStudio.ImageGotcha;
@@ -825,6 +827,7 @@
 				DEVELOPMENT_TEAM = XC238MH24L;
 				INFOPLIST_FILE = ImageGotchaAction/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MARKETING_VERSION = 2.0.0;
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"";
@@ -849,6 +852,7 @@
 				DEVELOPMENT_TEAM = XC238MH24L;
 				INFOPLIST_FILE = ImageGotchaAction/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.HansonStudio.ImageGotcha.ImageGotchaAction;
