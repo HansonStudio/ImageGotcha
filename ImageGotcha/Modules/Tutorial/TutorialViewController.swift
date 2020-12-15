@@ -11,23 +11,25 @@ import UIKit
 class TutorialViewController: UIViewController {
 
     @IBOutlet weak var introduceLabel: UILabel!
-
     @IBOutlet weak var t1: UILabel!
     @IBOutlet weak var t2: UILabel!
-    @IBOutlet weak var t3: UILabel!
-    @IBOutlet weak var t4: UILabel!
     @IBOutlet weak var t5: UILabel!
+    @IBOutlet weak var actionImageView: UIImageView!
+    @IBOutlet weak var screenShotImageView: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         title = LocalizedStr.tutorial
-        introduceLabel.text = LocalizedStr.introduce
         t1.text = LocalizedStr.openSafari
         t2.text = LocalizedStr.t2
-//        t3.text = LocalizedStr.t3
-//        t4.text = LocalizedStr.t4
         t5.text = LocalizedStr.t5
+        #if targetEnvironment(macCatalyst)
+        actionImageView.image = Asset.app.image
+        screenShotImageView.image = Asset.screenshotMac.image
+        introduceLabel.text = LocalizedStr.introduce + " (\(LocalizedStr.macTutorial))"
+        #else
+        introduceLabel.text = LocalizedStr.introduce
+        #endif
     }
 
     override func didReceiveMemoryWarning() {

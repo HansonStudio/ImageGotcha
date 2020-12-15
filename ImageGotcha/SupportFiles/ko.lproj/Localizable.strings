@@ -24,6 +24,7 @@
 "saveFail" = "실패";
 "ok" = "좋은";
 "introduce" = "ImageGotcha는 Safari의 확장 기능으로 현재 페이지의 이미지를 추출하여보고 저장할 수 있습니다";
+"macTutorial" = "[시스템 환경 설정-> 확장]에서 ImageGotcha를 활성화하십시오.";
 "t2" = "공유 버튼을 클릭하십시오";
 "t3" = "하단 행에서 더 선택";
 "t4" = "사용 ImageGotcha";

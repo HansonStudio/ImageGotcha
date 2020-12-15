@@ -32,6 +32,7 @@ enum Asset {
   static let more = ImageAsset(name: "more")
   static let safari = ImageAsset(name: "safari")
   static let screenShot = ImageAsset(name: "screenShot")
+  static let screenshotMac = ImageAsset(name: "screenshot_mac")
   static let select = ImageAsset(name: "select")
   static let toShare = ImageAsset(name: "toShare")
 }

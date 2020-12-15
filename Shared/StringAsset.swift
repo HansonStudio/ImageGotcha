@@ -25,6 +25,8 @@ enum LocalizedStr {
   static let imageGotcha = LocalizedStr.tr("Localizable", "ImageGotcha")
   /// ImageGotcha 是一个 Safari 的 Extension，它可以提取当前网页的图片，方便你查看和保存
   static let introduce = LocalizedStr.tr("Localizable", "introduce")
+  /// 请确保【系统设置->扩展】里开启了 ImageGotcha
+  static let macTutorial = LocalizedStr.tr("Localizable", "macTutorial")
   /// 无图片
   static let noPhoto = LocalizedStr.tr("Localizable", "noPhoto")
   /// 好的

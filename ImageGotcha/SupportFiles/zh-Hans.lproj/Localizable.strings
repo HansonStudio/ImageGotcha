@@ -24,6 +24,7 @@
 "saveFail" = "保存失败";
 "ok" = "好的";
 "introduce" = "ImageGotcha 是一个 Safari 的 Extension，它可以提取当前网页的图片，方便你查看和保存";
+"macTutorial" = "请确保【系统设置->扩展】里开启了 ImageGotcha";
 "t2" = "点击分享按钮";
 "t3" = "在最下面一行选择更多";
 "t4" = "启用 ImageGotcha";

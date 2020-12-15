@@ -24,6 +24,7 @@
 "saveFail" = "Save Failed";
 "ok" = "OK";
 "introduce" = "ImageGotcha is an Extension for Safari,it can extract the images from the current website, making it easy for you to browse and download images";
+"macTutorial" = "Please make sure enable ImageGotcha in [System Preferences->Extension]";
 "t2" = "Click the Share Button";
 "t3" = "Select More at the bottom row";
 "t4" = "Enable ImageGotcha";

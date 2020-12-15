@@ -24,6 +24,7 @@
 "saveFail" = "保存失敗";
 "ok" = "オーケー";
 "introduce" = "ImageGotcha は Safari の Extension，ただいまのホームページの画像を取ることができます，保存とチェックに便利です";
+"macTutorial" = "[システム環境設定->拡張機能]でImageGotchaが有効になっていることを確認してください";
 "t2" = "シェアボタンをクリックする";
 "t3" = "一番下の一行に選択が多い";
 "t4" = " ImageGotcha を開く";
